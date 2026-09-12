@@ -37,18 +37,24 @@ export default function ManageUsers() {
   };
 
   return (
-    <div>
+    <div className="admin-page-container">
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-fade-down">
+      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
           <div className="d-inline-flex align-items-center gap-2 mb-1">
-            <span className="badge-cyber badge-cyber-cyan">COMMUTER DIRECTORY</span>
+            <span className="ps-badge ps-badge-primary" style={{ fontSize: '0.68rem', padding: '0.2rem 0.55rem', letterSpacing: '0.04em' }}>
+              COMMUTER DIRECTORY
+            </span>
           </div>
-          <h2 className="fw-900 text-white mb-0" style={{ fontSize: '2rem' }}>
+          <h1 className="fw-800 mb-0" style={{ fontSize: '1.5rem', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
             Registered Users & Permissions
-          </h2>
+          </h1>
+          <p style={{ color: '#64748B', fontSize: '0.82rem', marginBottom: 0, marginTop: '2px' }}>
+            Directory of registered commuter accounts, permission management, and contact records.
+          </p>
         </div>
-        <span className="badge-cyber badge-cyber-emerald">
+        <span className="ps-badge ps-badge-success" style={{ fontSize: '0.75rem', padding: '0.35rem 0.75rem' }}>
+          <span className="ps-badge-dot"></span>
           {users.length} REGISTERED COMMUTERS
         </span>
       </div>
@@ -57,11 +63,11 @@ export default function ManageUsers() {
       <div className="cyber-card p-4">
         {loading ? (
           <div className="text-center py-5">
-            <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
+            <Spinner animation="border" style={{ color: 'var(--primary)' }} />
           </div>
         ) : (
           <div className="table-responsive">
-            <table className="table-cyber">
+            <table className="table-cyber mb-0">
               <thead>
                 <tr>
                   <th>#</th>
@@ -76,18 +82,18 @@ export default function ManageUsers() {
               <tbody>
                 {users.map((u, i) => (
                   <tr key={u.id}>
-                    <td className="font-mono text-muted">{i + 1}</td>
+                    <td style={{ fontFamily: 'monospace', color: '#64748B', fontWeight: 600 }}>{i + 1}</td>
                     <td>
-                      <span className="fw-700 text-white">{u.name}</span>
+                      <span className="fw-700" style={{ color: '#0F172A' }}>{u.name}</span>
                     </td>
-                    <td className="font-mono text-muted" style={{ fontSize: '0.85rem' }}>
+                    <td style={{ fontFamily: 'monospace', color: '#64748B', fontSize: '0.85rem' }}>
                       {u.email}
                     </td>
-                    <td className="font-mono text-light" style={{ fontSize: '0.82rem' }}>
+                    <td style={{ color: '#475569', fontSize: '0.85rem' }}>
                       {u.phone || '—'}
                     </td>
                     <td>
-                      <span className={`badge-cyber ${u.role === 'admin' ? 'badge-cyber-amber' : 'badge-cyber-cyan'}`}>
+                      <span className={`ps-badge ${u.role === 'admin' ? 'ps-badge-warning' : 'ps-badge-primary'}`} style={{ fontSize: '0.72rem', padding: '0.25rem 0.6rem' }}>
                         {u.role === 'admin' ? (
                           <><FaUserShield className="me-1" /> ADMINISTRATOR</>
                         ) : (
@@ -95,15 +101,16 @@ export default function ManageUsers() {
                         )}
                       </span>
                     </td>
-                    <td className="font-mono text-muted" style={{ fontSize: '0.82rem' }}>
+                    <td style={{ color: '#64748B', fontSize: '0.82rem' }}>
                       {formatDate(u.created_at?.split('T')[0])}
                     </td>
                     <td className="text-end">
                       <Button 
                         size="sm" 
+                        variant="light"
                         onClick={() => toggleRole(u)}
-                        className="btn-cyber-outline py-1 px-3"
-                        style={{ fontSize: '0.78rem' }}
+                        className="border py-1 px-3 rounded-2 fw-600"
+                        style={{ fontSize: '0.78rem', color: '#334155', background: '#F8FAFC' }}
                       >
                         Switch to {u.role === 'admin' ? 'User' : 'Admin'}
                       </Button>

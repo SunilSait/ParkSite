@@ -1,14 +1,11 @@
-/**
- * AdminLayout — V3 Cyber Command Center Layout
- * Sleek glass obsidian sidebar, role telemetry badges, and deep dark canvas.
- */
-
+import { useState } from 'react';
 import { Navigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Container, Spinner, Nav } from 'react-bootstrap';
+import { Spinner, Nav } from 'react-bootstrap';
 import {
   FaTachometerAlt, FaMapMarkerAlt, FaParking, FaUsers,
-  FaCalendarCheck, FaChartBar, FaArrowLeft, FaCar, FaShieldAlt, FaTerminal
+  FaCalendarCheck, FaChartBar, FaArrowLeft, FaShieldAlt,
+  FaBars, FaTimes
 } from 'react-icons/fa';
 
 const adminMenuItems = [
@@ -23,6 +20,7 @@ const adminMenuItems = [
 export default function AdminLayout() {
   const { isAuthenticated, isAdmin, loading, user } = useAuth();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   if (loading) {
     return (
@@ -41,44 +39,72 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="d-flex" style={{ minHeight: '100vh', background: '#F8FAFC' }}>
-      {/* ── Professional Admin Sidebar ───────────────────────────── */}
-      <div style={{
-        width: '260px',
-        minHeight: '100vh',
-        background: '#0F172A',
-        borderRight: '1px solid #1E293B',
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 10,
-        flexShrink: 0
-      }}>
+    <div className="admin-layout-root">
+      {/* Mobile Topbar for < 768px */}
+      <div className="admin-topbar-mobile">
+        <div className="d-flex align-items-center gap-2">
+          <button 
+            type="button" 
+            className="btn btn-sm text-white p-1 border-0" 
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation"
+          >
+            {mobileOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
+          <span className="fw-800" style={{ fontSize: '1.1rem', color: '#ffffff' }}>
+            Park<span style={{ color: '#60A5FA' }}>Site</span>
+          </span>
+        </div>
+        <span className="badge" style={{ background: '#1E293B', color: '#94A3B8', fontSize: '0.7rem' }}>
+          ADMIN
+        </span>
+      </div>
+
+      {/* Backdrop for mobile */}
+      {mobileOpen && (
+        <div 
+          className="admin-backdrop" 
+          onClick={() => setMobileOpen(false)} 
+        />
+      )}
+
+      {/* ── Professional Admin Sidebar (230px, Fixed) ─────────────── */}
+      <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`}>
         {/* Brand header */}
-        <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
-          <div className="d-flex align-items-center gap-2 mb-2">
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '10px',
-              background: '#2563EB', display: 'flex', alignItems: 'center',
-              justifyContent: 'center', color: '#ffffff'
-            }}>
-              <FaShieldAlt size={18} />
-            </div>
-            <div>
-              <span className="fw-800" style={{ fontSize: '1.25rem', color: '#ffffff' }}>
+        <div style={{ padding: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <div className="d-flex align-items-center gap-2">
+              <div style={{
+                width: '32px', height: '32px', borderRadius: '8px',
+                background: '#2563EB', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', color: '#ffffff'
+              }}>
+                <FaShieldAlt size={16} />
+              </div>
+              <span className="fw-800" style={{ fontSize: '1.18rem', color: '#ffffff', letterSpacing: '-0.02em' }}>
                 Park<span style={{ color: '#60A5FA' }}>Site</span>
               </span>
             </div>
+            {mobileOpen && (
+              <button 
+                type="button" 
+                className="btn btn-sm text-white p-0 d-md-none border-0"
+                onClick={() => setMobileOpen(false)}
+              >
+                <FaTimes size={16} />
+              </button>
+            )}
           </div>
           <div className="d-flex align-items-center gap-2">
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#16A34A', display: 'inline-block' }}></span>
-            <span className="text-uppercase fw-600" style={{ fontSize: '0.72rem', color: '#94A3B8', letterSpacing: '0.04em' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#16A34A', display: 'inline-block' }}></span>
+            <span className="text-uppercase fw-600" style={{ fontSize: '0.68rem', color: '#94A3B8', letterSpacing: '0.04em' }}>
               ADMIN CONSOLE // ACTIVE
             </span>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <Nav className="flex-column p-3 gap-1">
+        <Nav className="flex-column" style={{ padding: '14px 12px', gap: '4px' }}>
           {adminMenuItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -87,15 +113,18 @@ export default function AdminLayout() {
                 key={item.path}
                 as={Link}
                 to={item.path}
-                className="d-flex align-items-center gap-2.5 rounded-3 text-decoration-none"
+                onClick={() => setMobileOpen(false)}
+                className="d-flex align-items-center rounded-2 text-decoration-none"
                 style={{
-                  padding: '10px 14px',
+                  height: '42px',
+                  padding: '0 12px',
+                  gap: '10px',
                   fontSize: '0.88rem',
                   fontWeight: 600,
                   color: isActive ? '#FFFFFF' : '#94A3B8',
                   background: isActive ? '#2563EB' : 'transparent',
                   transition: 'all 0.15s ease',
-                  boxShadow: isActive ? '0 4px 12px rgba(37, 99, 235, 0.3)' : 'none'
+                  boxShadow: isActive ? '0 2px 8px rgba(37, 99, 235, 0.3)' : 'none'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
@@ -110,29 +139,30 @@ export default function AdminLayout() {
                   }
                 }}
               >
-                <Icon size={16} style={{ color: isActive ? '#FFFFFF' : '#64748B' }} />
-                <span>{item.label}</span>
+                <Icon size={15} style={{ color: isActive ? '#FFFFFF' : '#64748B', flexShrink: 0 }} />
+                <span className="text-truncate">{item.label}</span>
               </Nav.Link>
             );
           })}
         </Nav>
 
         {/* Bottom User info & Exit */}
-        <div className="p-3 mt-auto border-top" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
-          <div className="p-2.5 mb-3 rounded-3 d-flex align-items-center gap-2.5" style={{ background: '#1E293B', border: '1px solid #334155' }}>
+        <div className="mt-auto" style={{ padding: '14px 12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div className="p-2 mb-2 rounded-2 d-flex align-items-center gap-2" style={{ background: '#1E293B', border: '1px solid #334155' }}>
             <div style={{
-              width: '32px', height: '32px', borderRadius: '50%',
+              width: '28px', height: '28px', borderRadius: '50%',
               background: '#2563EB',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 800, fontSize: '0.8rem', color: '#FFFFFF'
+              fontWeight: 800, fontSize: '0.75rem', color: '#FFFFFF',
+              flexShrink: 0
             }}>
               {user?.name ? user.name[0].toUpperCase() : 'A'}
             </div>
             <div className="overflow-hidden">
-              <div className="fw-700 text-truncate" style={{ fontSize: '0.82rem', color: '#FFFFFF' }}>
+              <div className="fw-700 text-truncate" style={{ fontSize: '0.8rem', color: '#FFFFFF', lineHeight: 1.2 }}>
                 {user?.name || 'Administrator'}
               </div>
-              <div className="fw-600 text-uppercase" style={{ fontSize: '0.68rem', color: '#F59E0B', letterSpacing: '0.04em' }}>
+              <div className="fw-600 text-uppercase" style={{ fontSize: '0.64rem', color: '#F59E0B', letterSpacing: '0.04em' }}>
                 SUPERUSER
               </div>
             </div>
@@ -141,22 +171,21 @@ export default function AdminLayout() {
           <Nav.Link 
             as={Link} 
             to="/" 
-            className="d-flex align-items-center gap-2 p-2 rounded-2 text-decoration-none" 
-            style={{ fontSize: '0.84rem', color: '#94A3B8', fontWeight: 600 }}
+            className="d-flex align-items-center gap-2 p-1.5 rounded-2 text-decoration-none" 
+            style={{ fontSize: '0.8rem', color: '#94A3B8', fontWeight: 600 }}
             onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
             onMouseLeave={(e) => e.currentTarget.style.color = '#94A3B8'}
           >
-            <FaArrowLeft size={12} /> Exit to Public Portal
+            <FaArrowLeft size={11} /> Exit to Public Portal
           </Nav.Link>
         </div>
-      </div>
+      </aside>
 
       {/* ── Main Command Canvas ─────────────────────────────── */}
-      <div className="flex-grow-1 overflow-auto" style={{ background: '#F8FAFC', minHeight: '100vh' }}>
-        <div className="p-4 p-xl-5" style={{ maxWidth: '1440px', margin: '0 auto' }}>
-          <Outlet />
-        </div>
-      </div>
+      <main className="admin-main-viewport">
+        <Outlet />
+      </main>
     </div>
   );
 }
+

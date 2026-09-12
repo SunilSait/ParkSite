@@ -106,31 +106,64 @@ export default function ManageSlots() {
   };
 
   return (
-    <div>
+    <div className="admin-page-container">
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-fade-down">
+      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
           <div className="d-inline-flex align-items-center gap-2 mb-1">
-            <span className="badge-cyber badge-cyber-cyan">BAY TELEMETRY SENSORS</span>
+            <span className="ps-badge ps-badge-primary" style={{ fontSize: '0.68rem', padding: '0.2rem 0.55rem', letterSpacing: '0.04em' }}>
+              BAY TELEMETRY SENSORS
+            </span>
           </div>
-          <h2 className="fw-900 text-white mb-0" style={{ fontSize: '2rem' }}>
+          <h1 className="fw-800 mb-0" style={{ fontSize: '1.5rem', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
             Parking Bay Sensor Matrix
-          </h2>
+          </h1>
+          <p style={{ color: '#64748B', fontSize: '0.82rem', marginBottom: 0, marginTop: '2px' }}>
+            Real-time telemetry slot mapping, vehicle category classification, and rate configuration.
+          </p>
         </div>
 
-        <div className="d-flex gap-3 align-items-center">
-          <Form.Select 
-            value={selectedLocation} 
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            style={{ width: '240px' }}
-          >
-            {locations.map((l) => (
-              <option key={l.id} value={l.id}>{l.name}</option>
-            ))}
-          </Form.Select>
+        <div className="d-flex align-items-center gap-3 flex-wrap">
+          <div className="d-flex align-items-center gap-2">
+            <span style={{ fontSize: '0.84rem', fontWeight: 600, color: '#64748B', whiteSpace: 'nowrap' }}>
+              Facility Hub:
+            </span>
+            <Form.Select 
+              value={selectedLocation} 
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              style={{ 
+                width: '260px', 
+                height: '40px', 
+                borderRadius: '8px', 
+                borderColor: '#CBD5E1',
+                fontSize: '0.88rem',
+                fontWeight: 600,
+                color: '#0F172A',
+                paddingTop: '0.35rem',
+                paddingBottom: '0.35rem',
+                lineHeight: 1.4
+              }}
+              className="shadow-sm"
+            >
+              {locations.map((l) => (
+                <option key={l.id} value={l.id}>{l.name}</option>
+              ))}
+            </Form.Select>
+          </div>
 
-          <Button onClick={openAdd} className="btn-cyber-primary py-2 px-3" disabled={!selectedLocation}>
-            <FaPlus className="me-1" /> Add Bay
+          <Button 
+            onClick={openAdd} 
+            className="btn btn-primary d-inline-flex align-items-center gap-2 px-3.5 fw-600 shadow-sm border-0"
+            style={{ 
+              background: '#2563EB', 
+              height: '40px', 
+              borderRadius: '8px',
+              fontSize: '0.88rem',
+              whiteSpace: 'nowrap'
+            }} 
+            disabled={!selectedLocation}
+          >
+            <FaPlus size={12} /> Add New Bay
           </Button>
         </div>
       </div>
@@ -139,17 +172,19 @@ export default function ManageSlots() {
       <div className="cyber-card p-4">
         {loading ? (
           <div className="text-center py-5">
-            <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
+            <Spinner animation="border" style={{ color: 'var(--primary)' }} />
           </div>
         ) : slots.length === 0 ? (
           <div className="text-center py-5 text-muted">
-            <FaParking size={48} className="mb-3" />
-            <h5 className="text-white">No Slots in This Facility</h5>
-            <Button onClick={openAdd} className="btn-cyber-primary mt-2">Add First Bay</Button>
+            <FaParking size={44} className="mb-3 text-muted" />
+            <h5 className="fw-700" style={{ color: '#0F172A' }}>No Slots in This Facility</h5>
+            <Button onClick={openAdd} className="btn btn-primary mt-2" style={{ background: '#2563EB' }}>
+              Add First Bay
+            </Button>
           </div>
         ) : (
           <div className="table-responsive">
-            <table className="table-cyber">
+            <table className="table-cyber mb-0">
               <thead>
                 <tr>
                   <th>Bay Ident</th>
@@ -163,43 +198,51 @@ export default function ManageSlots() {
                 {slots.map((slot) => (
                   <tr key={slot.id}>
                     <td>
-                      <span className="font-mono fw-800 text-white" style={{ fontSize: '1.05rem' }}>
+                      <span className="font-mono fw-800" style={{ fontSize: '1rem', color: '#0F172A' }}>
                         {slot.slot_number}
                       </span>
                     </td>
                     <td>
-                      <span className="d-flex align-items-center gap-2 text-white">
+                      <span className="d-flex align-items-center gap-2" style={{ color: '#334155', fontWeight: 600 }}>
                         <span>{VEHICLE_ICONS[slot.vehicle_type] || '🚗'}</span>
                         <span>{slot.vehicle_type}</span>
-                        {slot.vehicle_type === 'EV' && <FaBolt color="#00f2fe" size={12} />}
+                        {slot.vehicle_type === 'EV' && <FaBolt color="#2563EB" size={12} />}
                       </span>
                     </td>
                     <td>
-                      <span className="font-mono fw-700 text-info">
+                      <span className="font-mono fw-700" style={{ color: '#2563EB' }}>
                         {formatCurrency(slot.price_per_hour)}/hr
                       </span>
                     </td>
                     <td>
-                      <span className={`badge-cyber ${
-                        slot.status === 'available' ? 'badge-cyber-emerald' :
-                        slot.status === 'occupied' ? 'badge-cyber-rose' :
-                        'badge-cyber-amber'
-                      }`}>
+                      <span className={`ps-badge ${
+                        slot.status === 'available' ? 'ps-badge-success' :
+                        slot.status === 'occupied' ? 'ps-badge-danger' :
+                        'ps-badge-warning'
+                      }`} style={{ fontSize: '0.72rem', padding: '0.25rem 0.6rem' }}>
+                        <span className="ps-badge-dot"></span>
                         {slot.status?.toUpperCase()}
                       </span>
                     </td>
                     <td className="text-end">
-                      <div className="d-flex justify-content-end gap-2">
-                        <Button onClick={() => openEdit(slot)} className="btn-cyber-outline py-1 px-2" title="Edit Bay">
-                          <FaEdit />
+                      <div className="d-flex justify-content-end gap-1.5">
+                        <Button 
+                          onClick={() => openEdit(slot)} 
+                          variant="light"
+                          className="btn-sm border p-1 px-2 rounded-2"
+                          style={{ color: '#334155', background: '#F8FAFC' }}
+                          title="Edit Bay"
+                        >
+                          <FaEdit size={13} />
                         </Button>
                         <Button 
                           onClick={() => handleDelete(slot.id)} 
-                          className="btn btn-sm btn-outline-danger py-1 px-2 rounded-2"
-                          style={{ border: '1px solid rgba(255, 51, 102, 0.4)', background: 'rgba(255, 51, 102, 0.08)' }}
+                          variant="light"
+                          className="btn-sm border p-1 px-2 rounded-2"
+                          style={{ color: '#DC2626', background: '#FEF2F2', borderColor: '#FECACA' }}
                           title="Delete Bay"
                         >
-                          <FaTrash />
+                          <FaTrash size={13} />
                         </Button>
                       </div>
                     </td>
@@ -211,17 +254,15 @@ export default function ManageSlots() {
         )}
       </div>
 
-      {/* Cyber Modal */}
+      {/* Clean Modal */}
       <Modal 
         show={showModal} 
         onHide={() => setShowModal(false)} 
         centered
-        contentClassName="cyber-card p-0 border-info"
-        style={{ backdropFilter: 'blur(10px)' }}
       >
-        <Modal.Header closeButton closeVariant="white" className="border-bottom border-secondary border-opacity-25 px-4 pt-4 pb-3">
-          <Modal.Title className="fw-800 text-white">
-            {editId ? 'Modify Bay Configuration' : 'Register New Parking Bay'}
+        <Modal.Header closeButton className="border-bottom px-4 pt-4 pb-3">
+          <Modal.Title className="fw-800" style={{ color: '#0F172A', fontSize: '1.25rem' }}>
+            {editId ? 'Modify Slot Configuration' : 'Register New Parking Bay'}
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
@@ -229,24 +270,24 @@ export default function ManageSlots() {
             {error && <Alert variant="danger" className="mb-3">{error}</Alert>}
 
             <Form.Group className="mb-3">
-              <Form.Label className="form-label">Slot Identifier Code</Form.Label>
+              <Form.Label className="form-label">Slot Identifier Label</Form.Label>
               <Form.Control 
                 value={formData.slot_number} 
                 onChange={(e) => setFormData({ ...formData, slot_number: e.target.value })} 
-                placeholder="e.g. A-01, B-12" 
+                placeholder="e.g. A-01, B-12, EV-04" 
                 required 
               />
             </Form.Group>
 
             <Row className="g-3 mb-3">
               <Col md={6}>
-                <Form.Label className="form-label">Vehicle Classification</Form.Label>
+                <Form.Label className="form-label">Vehicle Category</Form.Label>
                 <Form.Select 
                   value={formData.vehicle_type} 
                   onChange={(e) => setFormData({ ...formData, vehicle_type: e.target.value })}
                 >
                   <option value="Car">🚗 Passenger Car</option>
-                  <option value="Bike">🏍️ Two-Wheeler</option>
+                  <option value="Bike">🏍️ Two Wheeler</option>
                   <option value="EV">⚡ Electric Vehicle</option>
                 </Form.Select>
               </Col>
@@ -274,11 +315,11 @@ export default function ManageSlots() {
               </Form.Select>
             </Form.Group>
           </Modal.Body>
-          <Modal.Footer className="border-top border-secondary border-opacity-25 px-4 pb-4">
-            <Button variant="outline-light" onClick={() => setShowModal(false)} className="rounded-3">
+          <Modal.Footer className="border-top px-4 pb-4">
+            <Button variant="light" onClick={() => setShowModal(false)} className="rounded-3 border">
               Cancel
             </Button>
-            <Button type="submit" className="btn-cyber-primary" disabled={saving}>
+            <Button type="submit" className="btn btn-primary" style={{ background: '#2563EB' }} disabled={saving}>
               {saving ? <Spinner size="sm" className="me-1" /> : null}
               {editId ? 'Save Changes' : 'Create Slot'}
             </Button>
