@@ -42,45 +42,45 @@ export default function Profile() {
 
   return (
     <Container className="py-4">
-      <Link to="/user/dashboard" className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0 text-decoration-none" style={{ color: 'var(--cyan-neon)', fontSize: '0.9rem' }}>
+      <Link to="/user/dashboard" className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0 text-decoration-none" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', fontWeight: 600 }}>
         <FaArrowLeft /> Back to Dashboard
       </Link>
 
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
-          <div className="cyber-card p-4 p-md-5">
+          <div className="ps-card p-4 p-md-5">
             {/* Profile Avatar Header */}
-            <div className="text-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+            <div className="text-center mb-4 pb-3 border-bottom">
               <div style={{
                 width: '76px', height: '76px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #00f2fe, #7928ca)',
+                background: '#EFF6FF', color: 'var(--primary)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '2rem', fontWeight: 800, color: '#ffffff',
-                boxShadow: '0 0 25px rgba(0, 242, 254, 0.4)',
+                fontSize: '2rem', fontWeight: 800,
+                border: '2px solid #BFDBFE',
                 margin: '0 auto 1rem'
               }}>
                 {user?.name?.charAt(0)?.toUpperCase() || 'U'}
               </div>
-              <h3 className="fw-800 text-white mb-1">{user?.name}</h3>
-              <span className="badge-cyber badge-cyber-emerald">VERIFIED COMMUTER</span>
-              <div className="font-mono text-muted mt-1" style={{ fontSize: '0.82rem' }}>{user?.email}</div>
+              <h3 className="fw-800 mb-1" style={{ color: 'var(--text-primary)' }}>{user?.name}</h3>
+              <span className="ps-badge ps-badge-success">VERIFIED COMMUTER</span>
+              <div className="mt-1" style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>{user?.email}</div>
             </div>
 
             {success && (
-              <Alert variant="success" dismissible onClose={() => setSuccess('')} className="mb-4 border-success" style={{ background: 'rgba(16, 231, 157, 0.15)', color: '#34d399' }}>
+              <Alert variant="success" dismissible onClose={() => setSuccess('')} className="mb-4">
                 <FaCheckCircle className="me-2" /> {success}
               </Alert>
             )}
 
             {error && (
-              <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4 border-danger" style={{ background: 'rgba(255, 51, 102, 0.15)', color: '#ff6b8b' }}>
+              <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4">
                 {error}
               </Alert>
             )}
 
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label className="form-label">Full Name</Form.Label>
+                <Form.Label className="ps-form-label">Full Name</Form.Label>
                 <div className="position-relative">
                   <Form.Control 
                     value={formData.name}
@@ -88,24 +88,24 @@ export default function Profile() {
                     required 
                     style={{ paddingLeft: '2.5rem' }}
                   />
-                  <FaUser style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                  <FaUser style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 </div>
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label className="form-label">Email (Immutable)</Form.Label>
+                <Form.Label className="ps-form-label">Email (Immutable)</Form.Label>
                 <div className="position-relative">
                   <Form.Control 
                     value={user?.email} 
                     disabled 
-                    style={{ paddingLeft: '2.5rem', opacity: 0.6, cursor: 'not-allowed' }} 
+                    style={{ paddingLeft: '2.5rem', background: '#F1F5F9', color: 'var(--text-secondary)', cursor: 'not-allowed' }} 
                   />
-                  <FaEnvelope style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                  <FaEnvelope style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 </div>
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label className="form-label">Contact Phone</Form.Label>
+                <Form.Label className="ps-form-label">Contact Phone</Form.Label>
                 <div className="position-relative">
                   <Form.Control 
                     value={formData.phone}
@@ -113,12 +113,12 @@ export default function Profile() {
                     placeholder="+91 98765 43210"
                     style={{ paddingLeft: '2.5rem' }}
                   />
-                  <FaPhone style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                  <FaPhone style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 </div>
               </Form.Group>
 
               <Form.Group className="mb-4">
-                <Form.Label className="form-label">New Password (Leave blank to keep current)</Form.Label>
+                <Form.Label className="ps-form-label">New Password (Leave blank to keep current)</Form.Label>
                 <div className="position-relative">
                   <Form.Control 
                     type="password" 
@@ -127,13 +127,13 @@ export default function Profile() {
                     placeholder="••••••••" 
                     style={{ paddingLeft: '2.5rem' }}
                   />
-                  <FaLock style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                  <FaLock style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 </div>
               </Form.Group>
 
               <Button 
                 type="submit" 
-                className="btn-cyber-primary w-100 py-3 fw-bold" 
+                className="ps-btn-primary w-100 py-3 fw-bold" 
                 disabled={loading}
               >
                 {loading ? <Spinner size="sm" className="me-2" /> : <FaSave className="me-2" />}

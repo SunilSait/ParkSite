@@ -33,7 +33,7 @@ export default function MyBookings() {
   return (
     <Container className="py-4">
       {/* Back button */}
-      <Link to="/user/dashboard" className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0 text-decoration-none" style={{ color: 'var(--cyan-neon)', fontSize: '0.9rem' }}>
+      <Link to="/user/dashboard" className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0 text-decoration-none" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', fontWeight: 600 }}>
         <FaArrowLeft /> Back to Dashboard
       </Link>
 
@@ -41,11 +41,14 @@ export default function MyBookings() {
       <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
           <div className="d-inline-flex align-items-center gap-2 mb-1">
-            <span className="badge-cyber badge-cyber-cyan">COMMUTER PASS VAULT</span>
+            <span className="ps-badge ps-badge-primary">COMMUTER PASS VAULT</span>
           </div>
-          <h2 className="fw-900 text-white mb-0" style={{ fontSize: '2rem' }}>
+          <h2 className="fw-800 mb-0" style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>
             My Booking Archive
           </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: 0 }}>
+            Complete historical record of issued passes and access permits.
+          </p>
         </div>
 
         <div className="d-flex align-items-center gap-2">
@@ -63,71 +66,71 @@ export default function MyBookings() {
         </div>
       </div>
 
-      {/* Bookings Cyber Card Table */}
-      <div className="cyber-card p-4">
+      {/* Bookings Card Table */}
+      <div className="ps-card p-4">
         {loading ? (
           <div className="text-center py-5">
-            <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
-            <p className="mt-2 text-muted font-mono" style={{ fontSize: '0.85rem' }}>Loading passes...</p>
+            <Spinner animation="border" style={{ color: 'var(--primary)' }} />
+            <p className="mt-2" style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Loading passes...</p>
           </div>
         ) : bookings.length === 0 ? (
           <div className="text-center py-5">
-            <FaCalendarAlt size={48} style={{ color: 'rgba(255,255,255,0.15)' }} className="mb-3" />
-            <h5 className="text-white fw-700">No Reservations Found</h5>
-            <p style={{ color: '#94a3b8', fontSize: '0.88rem', maxWidth: '360px', margin: '0 auto 1.5rem' }}>
+            <FaCalendarAlt size={48} style={{ color: '#CBD5E1' }} className="mb-3" />
+            <h5 className="fw-700" style={{ color: 'var(--text-primary)' }}>No Reservations Found</h5>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', maxWidth: '360px', margin: '0 auto 1.5rem' }}>
               No parking passes found matching the current filter.
             </p>
-            <Button as={Link} to="/locations" className="btn-cyber-primary py-2 px-4">
+            <Button as={Link} to="/locations" className="ps-btn-primary py-2 px-4">
               Find & Reserve a Bay
             </Button>
           </div>
         ) : (
           <div className="table-responsive">
-            <table className="table-cyber">
-              <thead>
-                <tr>
-                  <th>Reference</th>
-                  <th>Facility Hub</th>
-                  <th>Bay #</th>
-                  <th>Date</th>
-                  <th>Window</th>
-                  <th>Fare</th>
-                  <th>Permit Status</th>
-                  <th className="text-end">Keycard</th>
+            <table className="table align-middle">
+              <thead style={{ background: '#F8FAFC' }}>
+                <tr style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>
+                  <th className="py-2.5">Pass Reference</th>
+                  <th className="py-2.5">Facility Hub</th>
+                  <th className="py-2.5">Bay #</th>
+                  <th className="py-2.5">Date</th>
+                  <th className="py-2.5">Window</th>
+                  <th className="py-2.5">Fare</th>
+                  <th className="py-2.5">Permit Status</th>
+                  <th className="py-2.5 text-end">Keycard</th>
                 </tr>
               </thead>
               <tbody>
                 {bookings.map((b) => (
-                  <tr key={b.id}>
+                  <tr key={b.id} style={{ borderBottom: '1px solid #E2E8F0' }}>
                     <td>
-                      <span className="font-mono fw-700" style={{ color: 'var(--cyan-neon)' }}>
+                      <span className="fw-700 font-mono" style={{ color: 'var(--primary)', fontSize: '0.85rem' }}>
                         {b.booking_reference}
                       </span>
                     </td>
                     <td>
-                      <span className="fw-600 text-white">{b.location?.name || '—'}</span>
+                      <span className="fw-600" style={{ color: 'var(--text-primary)' }}>{b.location?.name || '—'}</span>
                     </td>
                     <td>
-                      <span className="badge-cyber badge-cyber-cyan py-1 px-2 font-mono">
+                      <span className="ps-badge ps-badge-primary py-1 px-2 font-mono">
                         {b.slot?.slot_number || '—'}
                       </span>
                     </td>
-                    <td className="font-mono text-muted" style={{ fontSize: '0.85rem' }}>
+                    <td style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                       {formatDate(b.booking_date)}
                     </td>
-                    <td className="font-mono text-light" style={{ fontSize: '0.82rem' }}>
+                    <td style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                       {formatTime(b.start_time)} - {formatTime(b.end_time)}
                     </td>
                     <td>
-                      <span className="font-mono fw-700 text-success">
+                      <span className="fw-700" style={{ color: 'var(--success)' }}>
                         {formatCurrency(b.total_amount)}
                       </span>
                     </td>
                     <td>
-                      <span className={`badge-cyber ${
-                        b.status === 'confirmed' ? 'badge-cyber-emerald' :
-                        b.status === 'cancelled' ? 'badge-cyber-rose' :
-                        'badge-cyber-cyan'
+                      <span className={`ps-badge ${
+                        b.status === 'confirmed' ? 'ps-badge-success' :
+                        b.status === 'cancelled' ? 'ps-badge-danger' :
+                        'ps-badge-primary'
                       }`}>
                         {b.status?.toUpperCase()}
                       </span>
@@ -136,7 +139,7 @@ export default function MyBookings() {
                       <Button 
                         as={Link} 
                         to={`/user/booking/${b.id}`} 
-                        className="btn-cyber-outline py-1 px-3 d-inline-flex align-items-center gap-1"
+                        className="ps-btn-outline py-1 px-3 d-inline-flex align-items-center gap-1"
                         style={{ fontSize: '0.82rem' }}
                       >
                         <FaEye /> View Pass

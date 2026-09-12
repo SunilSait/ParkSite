@@ -26,8 +26,8 @@ export default function AdminLayout() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center min-vh-100 bg-deep">
-        <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
+      <div className="d-flex justify-content-center align-items-center min-vh-100" style={{ background: '#F8FAFC' }}>
+        <Spinner animation="border" style={{ color: 'var(--primary)' }} />
       </div>
     );
   }
@@ -41,34 +41,38 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="d-flex" style={{ minHeight: '100vh', background: 'var(--bg-deep)' }}>
-      {/* ── Cyber Admin Sidebar ───────────────────────────── */}
+    <div className="d-flex" style={{ minHeight: '100vh', background: '#F8FAFC' }}>
+      {/* ── Professional Admin Sidebar ───────────────────────────── */}
       <div style={{
         width: '260px',
         minHeight: '100vh',
-        background: 'rgba(5, 9, 24, 0.95)',
-        borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+        background: '#0F172A',
+        borderRight: '1px solid #1E293B',
         display: 'flex',
         flexDirection: 'column',
-        backdropFilter: 'blur(20px)',
-        zIndex: 10
+        zIndex: 10,
+        flexShrink: 0
       }}>
         {/* Brand header */}
-        <div className="p-4 border-bottom border-white border-opacity-10">
+        <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
           <div className="d-flex align-items-center gap-2 mb-2">
-            <div className="brand-icon-box" style={{ width: '36px', height: '36px' }}>
-              <FaShieldAlt size={16} color="#ffb703" />
+            <div style={{
+              width: '36px', height: '36px', borderRadius: '10px',
+              background: '#2563EB', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', color: '#ffffff'
+            }}>
+              <FaShieldAlt size={18} />
             </div>
             <div>
-              <span className="brand-text" style={{ fontSize: '1.25rem' }}>
-                Park<span className="gradient-text-cyber">Site</span>
+              <span className="fw-800" style={{ fontSize: '1.25rem', color: '#ffffff' }}>
+                Park<span style={{ color: '#60A5FA' }}>Site</span>
               </span>
             </div>
           </div>
           <div className="d-flex align-items-center gap-2">
-            <span className="radar-dot" style={{ width: 6, height: 6, background: '#10e79d' }}></span>
-            <span className="font-mono text-muted" style={{ fontSize: '0.72rem' }}>
-              ADMIN CONSOLE // ROOT
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#16A34A', display: 'inline-block' }}></span>
+            <span className="text-uppercase fw-600" style={{ fontSize: '0.72rem', color: '#94A3B8', letterSpacing: '0.04em' }}>
+              ADMIN CONSOLE // ACTIVE
             </span>
           </div>
         </div>
@@ -83,19 +87,30 @@ export default function AdminLayout() {
                 key={item.path}
                 as={Link}
                 to={item.path}
-                className={`d-flex align-items-center gap-2 rounded-3 text-decoration-none transition-fast ${
-                  isActive ? 'glass-panel text-white' : 'text-muted'
-                }`}
+                className="d-flex align-items-center gap-2.5 rounded-3 text-decoration-none"
                 style={{
                   padding: '10px 14px',
                   fontSize: '0.88rem',
                   fontWeight: 600,
-                  color: isActive ? 'var(--cyan-neon)' : '#94a3b8',
-                  background: isActive ? 'rgba(0, 242, 254, 0.12)' : 'transparent',
-                  border: isActive ? '1px solid rgba(0, 242, 254, 0.3)' : '1px solid transparent'
+                  color: isActive ? '#FFFFFF' : '#94A3B8',
+                  background: isActive ? '#2563EB' : 'transparent',
+                  transition: 'all 0.15s ease',
+                  boxShadow: isActive ? '0 4px 12px rgba(37, 99, 235, 0.3)' : 'none'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#94A3B8';
+                  }
                 }}
               >
-                <Icon size={16} style={{ color: isActive ? 'var(--cyan-neon)' : '#64748b' }} />
+                <Icon size={16} style={{ color: isActive ? '#FFFFFF' : '#64748B' }} />
                 <span>{item.label}</span>
               </Nav.Link>
             );
@@ -103,31 +118,42 @@ export default function AdminLayout() {
         </Nav>
 
         {/* Bottom User info & Exit */}
-        <div className="p-3 mt-auto border-top border-white border-opacity-10">
-          <div className="p-2 mb-3 rounded-3 glass-panel d-flex align-items-center gap-2">
+        <div className="p-3 mt-auto border-top" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+          <div className="p-2.5 mb-3 rounded-3 d-flex align-items-center gap-2.5" style={{ background: '#1E293B', border: '1px solid #334155' }}>
             <div style={{
-              width: '30px', height: '30px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, #ffb703, #fb8500)',
+              width: '32px', height: '32px', borderRadius: '50%',
+              background: '#2563EB',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 800, fontSize: '0.75rem', color: '#000'
+              fontWeight: 800, fontSize: '0.8rem', color: '#FFFFFF'
             }}>
-              A
+              {user?.name ? user.name[0].toUpperCase() : 'A'}
             </div>
             <div className="overflow-hidden">
-              <div className="text-white fw-700 text-truncate" style={{ fontSize: '0.8rem' }}>{user?.name || 'Administrator'}</div>
-              <div className="font-mono text-warning" style={{ fontSize: '0.68rem' }}>SUPERUSER</div>
+              <div className="fw-700 text-truncate" style={{ fontSize: '0.82rem', color: '#FFFFFF' }}>
+                {user?.name || 'Administrator'}
+              </div>
+              <div className="fw-600 text-uppercase" style={{ fontSize: '0.68rem', color: '#F59E0B', letterSpacing: '0.04em' }}>
+                SUPERUSER
+              </div>
             </div>
           </div>
 
-          <Nav.Link as={Link} to="/" className="text-muted d-flex align-items-center gap-2 p-2 rounded-2" style={{ fontSize: '0.84rem' }}>
+          <Nav.Link 
+            as={Link} 
+            to="/" 
+            className="d-flex align-items-center gap-2 p-2 rounded-2 text-decoration-none" 
+            style={{ fontSize: '0.84rem', color: '#94A3B8', fontWeight: 600 }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#94A3B8'}
+          >
             <FaArrowLeft size={12} /> Exit to Public Portal
           </Nav.Link>
         </div>
       </div>
 
       {/* ── Main Command Canvas ─────────────────────────────── */}
-      <div className="flex-grow-1 overflow-auto" style={{ background: 'var(--bg-deep)', minHeight: '100vh' }}>
-        <div className="p-4 p-lg-5">
+      <div className="flex-grow-1 overflow-auto" style={{ background: '#F8FAFC', minHeight: '100vh' }}>
+        <div className="p-4 p-xl-5" style={{ maxWidth: '1440px', margin: '0 auto' }}>
           <Outlet />
         </div>
       </div>

@@ -44,8 +44,8 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="text-center py-5">
-        <Spinner animation="border" style={{ color: 'var(--cyan-neon)', width: '3rem', height: '3rem' }} />
-        <p style={{ color: '#94a3b8', marginTop: '1rem', fontFamily: 'var(--font-mono)' }}>
+        <Spinner animation="border" style={{ color: 'var(--primary)', width: '3rem', height: '3rem' }} />
+        <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
           Syncing facility telemetry and revenue nodes...
         </p>
       </div>
@@ -53,14 +53,14 @@ export default function AdminDashboard() {
   }
 
   const statCards = [
-    { icon: FaUsers, label: 'Registered Commuters', value: stats?.total_users || 0, color: 'var(--cyan-neon)', glow: 'rgba(0,242,254,0.3)' },
-    { icon: FaMapMarkerAlt, label: 'Active Facilities', value: stats?.total_locations || 0, color: 'var(--emerald-neon)', glow: 'rgba(16,231,157,0.3)' },
-    { icon: FaParking, label: 'Total Sensor Bays', value: stats?.total_slots || 0, color: '#c084fc', glow: 'rgba(192,132,252,0.3)' },
-    { icon: FaParking, label: 'Available Bays', value: stats?.available_slots || 0, color: '#34d399', glow: 'rgba(52,211,153,0.3)' },
-    { icon: FaParking, label: 'Occupied Bays', value: stats?.occupied_slots || 0, color: '#f87171', glow: 'rgba(248,113,113,0.3)' },
-    { icon: FaCalendarCheck, label: "Today's Check-ins", value: stats?.todays_bookings || 0, color: '#fbbf24', glow: 'rgba(251,191,36,0.3)' },
-    { icon: FaCalendarCheck, label: 'Total Passes Issued', value: stats?.total_bookings || 0, color: '#60a5fa', glow: 'rgba(96,165,250,0.3)' },
-    { icon: FaRupeeSign, label: 'System Gross Tariff', value: formatCurrency(stats?.total_revenue || 0), color: 'var(--emerald-neon)', glow: 'rgba(16,231,157,0.3)', isStr: true },
+    { icon: FaUsers, label: 'Registered Commuters', value: stats?.total_users || 0, iconBg: '#EFF6FF', iconColor: 'var(--primary)' },
+    { icon: FaMapMarkerAlt, label: 'Active Facilities', value: stats?.total_locations || 0, iconBg: '#F0FDF4', iconColor: 'var(--success)' },
+    { icon: FaParking, label: 'Total Sensor Bays', value: stats?.total_slots || 0, iconBg: '#EEF2FF', iconColor: '#6366F1' },
+    { icon: FaParking, label: 'Available Bays', value: stats?.available_slots || 0, iconBg: '#F0FDF4', iconColor: 'var(--success)' },
+    { icon: FaParking, label: 'Occupied Bays', value: stats?.occupied_slots || 0, iconBg: '#FEF2F2', iconColor: 'var(--danger)' },
+    { icon: FaCalendarCheck, label: "Today's Check-ins", value: stats?.todays_bookings || 0, iconBg: '#FEF3C7', iconColor: '#D97706' },
+    { icon: FaCalendarCheck, label: 'Total Passes Issued', value: stats?.total_bookings || 0, iconBg: '#F0F9FF', iconColor: '#0284C7' },
+    { icon: FaRupeeSign, label: 'System Gross Tariff', value: formatCurrency(stats?.total_revenue || 0), iconBg: '#ECFDF5', iconColor: '#059669', isStr: true },
   ];
 
   const chartOptions = {
@@ -69,21 +69,21 @@ export default function AdminDashboard() {
     plugins: {
       legend: { display: false },
       tooltip: { 
-        backgroundColor: '#0c1328', 
-        titleColor: '#f8fafc', 
-        bodyColor: '#38bdf8', 
-        borderColor: 'rgba(0, 242, 254, 0.4)', 
-        borderWidth: 1 
+        backgroundColor: '#0F172A', 
+        titleColor: '#FFFFFF', 
+        bodyColor: '#93C5FD', 
+        padding: 10,
+        cornerRadius: 8
       },
     },
     scales: {
       x: { 
-        ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace", size: 10 } }, 
-        grid: { color: 'rgba(255, 255, 255, 0.05)' } 
+        ticks: { color: '#64748B', font: { family: "'Inter', sans-serif", size: 11 } }, 
+        grid: { color: '#F1F5F9' } 
       },
       y: { 
-        ticks: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace" } }, 
-        grid: { color: 'rgba(255, 255, 255, 0.05)' } 
+        ticks: { color: '#64748B', font: { family: "'Inter', sans-serif", size: 11 } }, 
+        grid: { color: '#F1F5F9' } 
       },
     },
   };
@@ -93,9 +93,8 @@ export default function AdminDashboard() {
     datasets: [{
       label: 'Tariff Revenue (₹)',
       data: revenue?.daily_revenue?.map(d => d.revenue) || [],
-      backgroundColor: 'rgba(0, 242, 254, 0.4)',
-      borderColor: '#00f2fe',
-      borderWidth: 2,
+      backgroundColor: 'rgba(37, 99, 235, 0.85)',
+      hoverBackgroundColor: '#1D4ED8',
       borderRadius: 6,
     }],
   };
@@ -104,7 +103,7 @@ export default function AdminDashboard() {
     labels: ['Available', 'Occupied', 'Maintenance'],
     datasets: [{
       data: [stats?.available_slots || 0, stats?.occupied_slots || 0, stats?.maintenance_slots || 0],
-      backgroundColor: ['#10e79d', '#ff4757', '#64748b'],
+      backgroundColor: ['#16A34A', '#DC2626', '#94A3B8'],
       borderWidth: 0,
     }],
   };
@@ -115,18 +114,18 @@ export default function AdminDashboard() {
       <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-fade-down">
         <div>
           <div className="d-inline-flex align-items-center gap-2 mb-1">
-            <span className="radar-dot" style={{ background: 'var(--emerald-neon)' }}></span>
-            <span className="font-mono text-muted" style={{ fontSize: '0.78rem' }}>
-              REAL-TIME IOT TELEMETRY TELEMETRY GATEWAY
-            </span>
+            <span className="ps-badge ps-badge-primary">REAL-TIME IOT TELEMETRY GATEWAY</span>
           </div>
-          <h2 className="fw-900 text-white mb-0" style={{ fontSize: '2.1rem' }}>
+          <h2 className="fw-800 mb-0" style={{ fontSize: '2.1rem', color: 'var(--text-primary)' }}>
             Mobility Command Center
           </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', marginBottom: 0 }}>
+            Live sensor node status, parking bay availability, and institutional revenue telemetry.
+          </p>
         </div>
         <div className="d-flex gap-2">
-          <span className="badge-cyber badge-cyber-emerald">ALL 3 NODES ONLINE</span>
-          <span className="badge-cyber badge-cyber-cyan">99.98% ACCURACY</span>
+          <span className="ps-badge ps-badge-success">ALL 3 NODES ONLINE</span>
+          <span className="ps-badge ps-badge-primary">99.98% ACCURACY</span>
         </div>
       </div>
 
@@ -136,22 +135,22 @@ export default function AdminDashboard() {
           const Icon = sc.icon;
           return (
             <Col sm={6} lg={3} key={i}>
-              <div className="cyber-card p-3 h-100" style={{ borderColor: sc.glow }}>
+              <div className="ps-card p-3.5 h-100 hover-lift">
                 <div className="d-flex align-items-center gap-3">
                   <div style={{
-                    width: '42px', height: '42px', borderRadius: '12px',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: `1px solid ${sc.glow}`,
+                    width: '44px', height: '44px', borderRadius: '12px',
+                    background: sc.iconBg,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: sc.color
+                    color: sc.iconColor,
+                    flexShrink: 0
                   }}>
-                    <Icon size={18} />
+                    <Icon size={20} />
                   </div>
                   <div>
-                    <div className="font-mono text-muted text-uppercase" style={{ fontSize: '0.7rem' }}>
+                    <div className="fw-600 text-uppercase" style={{ fontSize: '0.72rem', letterSpacing: '0.04em', color: 'var(--text-secondary)' }}>
                       {sc.label}
                     </div>
-                    <div className="font-display fw-800 text-white" style={{ fontSize: '1.45rem', lineHeight: 1.1 }}>
+                    <div className="fw-800" style={{ fontSize: '1.5rem', lineHeight: 1.1, color: 'var(--text-primary)' }}>
                       {sc.value}
                     </div>
                   </div>
@@ -165,13 +164,13 @@ export default function AdminDashboard() {
       {/* Charts Row */}
       <Row className="g-4 mb-4">
         <Col lg={8}>
-          <div className="cyber-card p-4 h-100">
-            <div className="d-flex justify-content-between align-items-center mb-4">
+          <div className="ps-card p-4 h-100">
+            <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
               <div>
-                <h5 className="fw-700 text-white mb-0">Daily Revenue Performance</h5>
-                <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Past 30 days settlement trend</span>
+                <h5 className="fw-700 mb-0" style={{ color: 'var(--text-primary)' }}>Daily Revenue Performance</h5>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Past 30 days settlement trend</span>
               </div>
-              <span className="badge-cyber badge-cyber-cyan font-mono">30-DAY TIMELINE</span>
+              <span className="ps-badge ps-badge-primary">30-DAY TIMELINE</span>
             </div>
             <div style={{ height: '300px' }}>
               <Bar data={dailyChartData} options={chartOptions} />
@@ -180,16 +179,27 @@ export default function AdminDashboard() {
         </Col>
 
         <Col lg={4}>
-          <div className="cyber-card p-4 h-100 text-center">
-            <h5 className="fw-700 text-white mb-1">Bay Utilization Ratio</h5>
-            <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Live sensor status distribution</span>
-            <div style={{ height: '240px', marginTop: '1.5rem' }}>
+          <div className="ps-card p-4 h-100 text-center">
+            <div className="mb-3 pb-2 border-bottom text-start">
+              <h5 className="fw-700 mb-0" style={{ color: 'var(--text-primary)' }}>Bay Utilization Ratio</h5>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Live sensor status distribution</span>
+            </div>
+            <div style={{ height: '240px', marginTop: '1rem' }}>
               <Doughnut 
                 data={slotUtilization} 
                 options={{ 
                   responsive: true, 
                   maintainAspectRatio: false,
-                  plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: "'JetBrains Mono', monospace", size: 11 } } } } 
+                  plugins: { 
+                    legend: { 
+                      position: 'bottom', 
+                      labels: { 
+                        color: '#475569', 
+                        font: { family: "'Inter', sans-serif", size: 12, weight: '600' },
+                        padding: 16
+                      } 
+                    } 
+                  } 
                 }} 
               />
             </div>

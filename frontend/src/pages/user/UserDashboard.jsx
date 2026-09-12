@@ -33,25 +33,24 @@ function useCounter(target, duration = 1000) {
   return count;
 }
 
-function StatCard({ icon: Icon, label, value, colorClass, borderGlow }) {
+function StatCard({ icon: Icon, label, value, iconBg, iconColor }) {
   const animatedValue = useCounter(typeof value === 'number' ? value : 0);
   return (
     <Col sm={6} lg={3}>
-      <div className="cyber-card p-4 h-100" style={{ borderColor: borderGlow }}>
+      <div className="ps-card p-4 h-100">
         <div className="d-flex align-items-center gap-3">
           <div style={{
-            width: '48px', height: '48px', borderRadius: '14px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: `1px solid ${borderGlow}`,
+            width: '48px', height: '48px', borderRadius: '12px',
+            background: iconBg,
             display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}>
-            <Icon size={22} className={colorClass} />
+            <Icon size={22} color={iconColor} />
           </div>
           <div>
-            <div className="font-mono text-muted text-uppercase" style={{ fontSize: '0.72rem', letterSpacing: '0.05em' }}>
+            <div className="fw-600 text-uppercase" style={{ fontSize: '0.72rem', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
               {label}
             </div>
-            <div className="font-display fw-800 text-white" style={{ fontSize: '1.8rem', lineHeight: 1.1 }}>
+            <div className="fw-800" style={{ fontSize: '1.8rem', lineHeight: 1.1, color: 'var(--text-primary)' }}>
               {typeof value === 'number' ? animatedValue : value}
             </div>
           </div>
@@ -93,8 +92,8 @@ export default function UserDashboard() {
   if (loading) {
     return (
       <Container className="py-5 text-center">
-        <Spinner animation="border" style={{ color: 'var(--cyan-neon)', width: '3rem', height: '3rem' }} />
-        <p style={{ color: '#94a3b8', marginTop: '1rem', fontFamily: 'var(--font-mono)' }}>
+        <Spinner animation="border" style={{ color: 'var(--primary)', width: '3rem', height: '3rem' }} />
+        <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
           Retrieving commuter profile and booking telemetry...
         </p>
       </Container>
@@ -107,48 +106,49 @@ export default function UserDashboard() {
       <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 animate-fade-down">
         <div>
           <div className="d-inline-flex align-items-center gap-2 mb-1">
-            <span className="badge-cyber badge-cyber-emerald">COMMUTER ACCOUNT ACTIVE</span>
+            <span className="ps-badge ps-badge-success">COMMUTER ACCOUNT ACTIVE</span>
           </div>
-          <h2 className="fw-900 text-white mb-1" style={{ fontSize: '2.1rem' }}>
-            Welcome back, <span className="gradient-text-cyber">{user?.name?.split(' ')[0] || 'Driver'}</span> 👋
+          <h2 className="fw-800 mb-1" style={{ fontSize: '2.1rem', color: 'var(--text-primary)' }}>
+            Welcome back, <span style={{ color: 'var(--primary)' }}>{user?.name?.split(' ')[0] || 'Driver'}</span> 👋
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '0.92rem' }} className="mb-0">
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem' }} className="mb-0">
             Real-time summary of your parking permits, active QR passes, and spend history.
           </p>
         </div>
 
-        <Button as={Link} to="/locations" className="btn-cyber-primary py-2 px-4">
+        <Button as={Link} to="/locations" className="ps-btn-primary py-2 px-4">
           <FaPlus /> Book New Bay
         </Button>
       </div>
 
       {/* ── Active Ticket Pass Banner (If active booking exists) ─ */}
       {activeBooking && (
-        <div className="cyber-card p-4 mb-4 animate-fade-up" style={{
-          background: 'linear-gradient(135deg, rgba(16, 231, 157, 0.12), rgba(0, 242, 254, 0.08), rgba(6, 10, 26, 0.95))',
-          borderColor: 'var(--emerald-neon)'
+        <div className="ps-card p-4 mb-4 animate-fade-up" style={{
+          background: 'linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%)',
+          borderLeft: '4px solid var(--success)',
+          border: '1px solid #BBF7D0'
         }}>
           <Row className="align-items-center g-3">
             <Col md={8}>
               <div className="d-flex align-items-center gap-2 mb-2">
-                <span className="radar-dot" style={{ background: 'var(--emerald-neon)' }}></span>
-                <span className="font-mono fw-700 text-success" style={{ fontSize: '0.8rem' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--success)' }}></span>
+                <span className="fw-700 text-success" style={{ fontSize: '0.8rem', letterSpacing: '0.04em' }}>
                   ACTIVE RESERVATION IN PROGRESS
                 </span>
-                <span className="badge-cyber badge-cyber-cyan py-0 px-2" style={{ fontSize: '0.68rem' }}>
+                <span className="ps-badge ps-badge-primary py-0 px-2" style={{ fontSize: '0.72rem' }}>
                   REF: {activeBooking.booking_reference}
                 </span>
               </div>
-              <h4 className="fw-800 text-white mb-1">
+              <h4 className="fw-800 mb-1" style={{ color: 'var(--text-primary)' }}>
                 {activeBooking.location?.name} — Bay #{activeBooking.slot?.slot_number}
               </h4>
-              <p style={{ color: '#cbd5e1', fontSize: '0.88rem' }} className="mb-0">
-                <FaCalendarAlt className="me-1 text-warning" /> {formatDate(activeBooking.booking_date)} • 
-                <span className="font-mono text-info ms-1">{formatTime(activeBooking.start_time)} to {formatTime(activeBooking.end_time)}</span>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }} className="mb-0">
+                <FaCalendarAlt className="me-1" color="#D97706" /> {formatDate(activeBooking.booking_date)} • 
+                <span className="fw-600 ms-1" style={{ color: 'var(--primary)' }}>{formatTime(activeBooking.start_time)} to {formatTime(activeBooking.end_time)}</span>
               </p>
             </Col>
             <Col md={4} className="text-md-end">
-              <Button as={Link} to={`/user/booking/${activeBooking.id}`} className="btn-cyber-emerald py-2 px-4">
+              <Button as={Link} to={`/user/booking/${activeBooking.id}`} className="ps-btn-primary py-2 px-4" style={{ background: 'var(--success)', borderColor: 'var(--success)' }}>
                 <FaQrcode className="me-2" /> Display QR Keycard
               </Button>
             </Col>
@@ -162,29 +162,29 @@ export default function UserDashboard() {
           icon={FaCalendarAlt} 
           label="Total Bookings" 
           value={stats.total} 
-          colorClass="text-info" 
-          borderGlow="rgba(0, 242, 254, 0.3)" 
+          iconBg="#EFF6FF"
+          iconColor="var(--primary)"
         />
         <StatCard 
           icon={FaCalendarCheck} 
           label="Active Bays" 
           value={stats.confirmed} 
-          colorClass="text-success" 
-          borderGlow="rgba(16, 231, 157, 0.3)" 
+          iconBg="#F0FDF4"
+          iconColor="var(--success)"
         />
         <StatCard 
           icon={FaCheckCircle} 
           label="Completed" 
           value={stats.completed} 
-          colorClass="text-primary" 
-          borderGlow="rgba(157, 78, 221, 0.3)" 
+          iconBg="#EEF2FF"
+          iconColor="#6366F1"
         />
         <StatCard 
           icon={FaTimesCircle} 
           label="Cancelled" 
           value={stats.cancelled} 
-          colorClass="text-danger" 
-          borderGlow="rgba(255, 51, 102, 0.3)" 
+          iconBg="#FEF2F2"
+          iconColor="var(--danger)"
         />
       </Row>
 
@@ -192,10 +192,12 @@ export default function UserDashboard() {
       <Row className="g-3 mb-4">
         <Col md={4}>
           <Link to="/locations" style={{ textDecoration: 'none' }}>
-            <div className="cyber-card p-4 h-100">
-              <FaParking size={28} color="#00f2fe" className="mb-2" />
-              <h5 className="fw-700 text-white mb-1">Find & Reserve</h5>
-              <p style={{ color: '#94a3b8', fontSize: '0.84rem', marginBottom: 0 }}>
+            <div className="ps-card p-4 h-100 hover-lift">
+              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                <FaParking size={22} color="var(--primary)" />
+              </div>
+              <h5 className="fw-700 mb-1" style={{ color: 'var(--text-primary)' }}>Find & Reserve</h5>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', marginBottom: 0 }}>
                 Explore live sensors across Chennai hubs
               </p>
             </div>
@@ -203,10 +205,12 @@ export default function UserDashboard() {
         </Col>
         <Col md={4}>
           <Link to="/user/bookings" style={{ textDecoration: 'none' }}>
-            <div className="cyber-card p-4 h-100">
-              <FaCalendarCheck size={28} color="#10e79d" className="mb-2" />
-              <h5 className="fw-700 text-white mb-1">Pass History</h5>
-              <p style={{ color: '#94a3b8', fontSize: '0.84rem', marginBottom: 0 }}>
+            <div className="ps-card p-4 h-100 hover-lift">
+              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                <FaCalendarCheck size={22} color="var(--success)" />
+              </div>
+              <h5 className="fw-700 mb-1" style={{ color: 'var(--text-primary)' }}>Pass History</h5>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', marginBottom: 0 }}>
                 View complete archive of QR permits and receipts
               </p>
             </div>
@@ -214,10 +218,12 @@ export default function UserDashboard() {
         </Col>
         <Col md={4}>
           <Link to="/user/profile" style={{ textDecoration: 'none' }}>
-            <div className="cyber-card p-4 h-100">
-              <FaCheckCircle size={28} color="#ffb703" className="mb-2" />
-              <h5 className="fw-700 text-white mb-1">Profile & Vehicle</h5>
-              <p style={{ color: '#94a3b8', fontSize: '0.84rem', marginBottom: 0 }}>
+            <div className="ps-card p-4 h-100 hover-lift">
+              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                <FaCheckCircle size={22} color="#D97706" />
+              </div>
+              <h5 className="fw-700 mb-1" style={{ color: 'var(--text-primary)' }}>Profile & Vehicle</h5>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', marginBottom: 0 }}>
                 Update contact info and security settings
               </p>
             </div>
@@ -226,75 +232,75 @@ export default function UserDashboard() {
       </Row>
 
       {/* ── Recent Activity Table ────────────────────────── */}
-      <div className="cyber-card p-4">
-        <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-secondary border-opacity-25">
+      <div className="ps-card p-4">
+        <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
           <div>
-            <h5 className="fw-700 text-white mb-0">Recent Parking Records</h5>
-            <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Latest confirmed transactions</span>
+            <h5 className="fw-700 mb-0" style={{ color: 'var(--text-primary)' }}>Recent Parking Records</h5>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>Latest confirmed transactions</span>
           </div>
-          <Button as={Link} to="/user/bookings" className="btn-cyber-outline py-1 px-3" style={{ fontSize: '0.82rem' }}>
+          <Button as={Link} to="/user/bookings" className="ps-btn-outline py-1 px-3" style={{ fontSize: '0.82rem' }}>
             View All History <FaArrowRight size={11} className="ms-1" />
           </Button>
         </div>
 
         {recentBookings.length === 0 ? (
           <div className="text-center py-5">
-            <FaParking size={48} style={{ color: 'rgba(255,255,255,0.15)' }} className="mb-3" />
-            <h6 className="text-white">No Bookings Recorded Yet</h6>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+            <FaParking size={48} style={{ color: '#CBD5E1' }} className="mb-3" />
+            <h6 style={{ color: 'var(--text-primary)' }}>No Bookings Recorded Yet</h6>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
               Your reservations and digital QR passes will appear here once booked.
             </p>
-            <Button as={Link} to="/locations" className="btn-cyber-primary py-2 px-4">
+            <Button as={Link} to="/locations" className="ps-btn-primary py-2 px-4">
               Explore Available Slots
             </Button>
           </div>
         ) : (
           <div className="table-responsive">
-            <table className="table-cyber">
-              <thead>
-                <tr>
-                  <th>Pass Reference</th>
-                  <th>Hub Location</th>
-                  <th>Bay No.</th>
-                  <th>Date</th>
-                  <th>Window</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th className="text-end">Action</th>
+            <table className="table align-middle">
+              <thead style={{ background: '#F8FAFC' }}>
+                <tr style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>
+                  <th className="py-2">Pass Reference</th>
+                  <th className="py-2">Hub Location</th>
+                  <th className="py-2">Bay No.</th>
+                  <th className="py-2">Date</th>
+                  <th className="py-2">Window</th>
+                  <th className="py-2">Amount</th>
+                  <th className="py-2">Status</th>
+                  <th className="py-2 text-end">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {recentBookings.map((b) => (
-                  <tr key={b.id}>
+                  <tr key={b.id} style={{ borderBottom: '1px solid #E2E8F0' }}>
                     <td>
-                      <span className="font-mono fw-700" style={{ color: 'var(--cyan-neon)' }}>
+                      <span className="fw-700 font-mono" style={{ color: 'var(--primary)', fontSize: '0.85rem' }}>
                         {b.booking_reference}
                       </span>
                     </td>
                     <td>
-                      <span className="fw-600 text-white">{b.location?.name || '—'}</span>
+                      <span className="fw-600" style={{ color: 'var(--text-primary)' }}>{b.location?.name || '—'}</span>
                     </td>
                     <td>
-                      <span className="badge-cyber badge-cyber-cyan py-1 px-2">
+                      <span className="ps-badge ps-badge-primary py-1 px-2">
                         {b.slot?.slot_number || '—'}
                       </span>
                     </td>
-                    <td className="font-mono text-muted" style={{ fontSize: '0.85rem' }}>
+                    <td style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                       {formatDate(b.booking_date)}
                     </td>
-                    <td className="font-mono text-light" style={{ fontSize: '0.82rem' }}>
+                    <td style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                       {formatTime(b.start_time)} - {formatTime(b.end_time)}
                     </td>
                     <td>
-                      <span className="font-mono fw-700 text-success">
+                      <span className="fw-700" style={{ color: 'var(--success)' }}>
                         {formatCurrency(b.total_amount)}
                       </span>
                     </td>
                     <td>
-                      <span className={`badge-cyber ${
-                        b.status === 'confirmed' ? 'badge-cyber-emerald' :
-                        b.status === 'cancelled' ? 'badge-cyber-rose' :
-                        'badge-cyber-cyan'
+                      <span className={`ps-badge ${
+                        b.status === 'confirmed' ? 'ps-badge-success' :
+                        b.status === 'cancelled' ? 'ps-badge-danger' :
+                        'ps-badge-primary'
                       }`}>
                         {b.status?.toUpperCase()}
                       </span>
@@ -303,7 +309,7 @@ export default function UserDashboard() {
                       <Button 
                         as={Link} 
                         to={`/user/booking/${b.id}`} 
-                        className="btn-cyber-outline py-1 px-2"
+                        className="ps-btn-outline py-1 px-2"
                         title="View Digital QR Pass"
                       >
                         <FaEye />

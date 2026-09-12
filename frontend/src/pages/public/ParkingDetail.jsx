@@ -1,6 +1,6 @@
 /**
- * Parking Detail — V3 Smart Bay Floor Plan & Reservation Terminal
- * Visual parking bays with lane lines, real-time rate calculator, and instant booking lock.
+ * Parking Detail — Professional Smart Bay Floor Plan & Reservation Terminal
+ * Visual parking bays with clear status, real-time rate calculator, and instant booking lock.
  */
 
 import { useState, useEffect } from 'react';
@@ -8,7 +8,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Spinner, Alert } from 'react-bootstrap';
 import { 
   FaMapMarkerAlt, FaClock, FaParking, FaCar, FaArrowLeft, FaSearch, 
-  FaShoppingCart, FaBolt, FaMotorcycle, FaCheckCircle, FaTimesCircle, FaShieldAlt
+  FaShoppingCart, FaBolt 
 } from 'react-icons/fa';
 import locationService from '../../services/locationService';
 import bookingService from '../../services/bookingService';
@@ -98,9 +98,9 @@ export default function ParkingDetail() {
   if (loading) {
     return (
       <Container className="py-5 text-center">
-        <Spinner animation="border" style={{ color: 'var(--cyan-neon)', width: '3rem', height: '3rem' }} />
-        <p style={{ color: '#94a3b8', marginTop: '1rem', fontFamily: 'var(--font-mono)' }}>
-          Loading facility telemetry...
+        <Spinner animation="border" style={{ color: 'var(--primary)', width: '3rem', height: '3rem' }} />
+        <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
+          Loading facility details...
         </p>
       </Container>
     );
@@ -109,9 +109,9 @@ export default function ParkingDetail() {
   if (!location) {
     return (
       <Container className="py-5 text-center">
-        <div className="cyber-card p-5 mx-auto" style={{ maxWidth: '500px' }}>
-          <h4 className="text-white fw-700 mb-3">Facility Node Not Found</h4>
-          <Button onClick={() => navigate('/locations')} className="btn-cyber-primary">
+        <div className="ps-card p-5 mx-auto" style={{ maxWidth: '500px' }}>
+          <h4 className="fw-700 mb-3" style={{ color: 'var(--text-primary)' }}>Facility Not Found</h4>
+          <Button onClick={() => navigate('/locations')} className="ps-btn-primary">
             Return to All Locations
           </Button>
         </div>
@@ -125,44 +125,41 @@ export default function ParkingDetail() {
       <button 
         onClick={() => navigate('/locations')} 
         className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0" 
-        style={{ color: 'var(--cyan-neon)', fontSize: '0.9rem', background: 'transparent' }}
+        style={{ color: 'var(--primary)', fontWeight: 600, fontSize: '0.92rem', background: 'transparent' }}
       >
         <FaArrowLeft /> Back to Parking Hubs
       </button>
 
-      {/* ── Facility Command Header ─────────────────────────── */}
-      <div className="cyber-card p-4 mb-4 position-relative overflow-hidden" style={{
-        background: 'linear-gradient(135deg, rgba(14, 24, 58, 0.9), rgba(6, 10, 26, 0.95))',
-        border: '1px solid rgba(0, 242, 254, 0.25)'
-      }}>
+      {/* ── Facility Header ─────────────────────────── */}
+      <div className="ps-card p-4 mb-4">
         <Row className="align-items-center g-3">
           <Col lg={8}>
             <div className="d-flex align-items-center gap-2 mb-2">
-              <span className="badge-cyber badge-cyber-emerald">
-                <span className="radar-dot"></span> SENSORS ACTIVE
+              <span className="ps-badge ps-badge-success">
+                <span className="ps-badge-dot"></span> SENSORS ACTIVE
               </span>
-              <span className="badge-cyber badge-cyber-cyan">
+              <span className="ps-badge ps-badge-primary">
                 NODE ID: CHN-0{location.id}
               </span>
             </div>
-            <h2 className="fw-900 text-white mb-2" style={{ fontSize: '2.2rem' }}>
+            <h2 className="fw-800 mb-2" style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>
               {location.name}
             </h2>
-            <div className="d-flex flex-wrap gap-4 text-muted" style={{ fontSize: '0.88rem' }}>
-              <span className="text-light">
-                <FaMapMarkerAlt className="text-danger me-1" /> {location.address}, {location.city}
+            <div className="d-flex flex-wrap gap-4" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+              <span>
+                <FaMapMarkerAlt className="text-primary me-1" /> {location.address}, {location.city}
               </span>
-              <span className="text-light">
+              <span>
                 <FaClock className="text-warning me-1" /> {location.opening_time} — {location.closing_time}
               </span>
             </div>
           </Col>
 
           <Col lg={4} className="text-lg-end">
-            <div className="d-inline-flex flex-column align-items-lg-end glass-panel p-3 px-4 rounded-3 border border-secondary border-opacity-25">
-              <div className="font-mono text-muted" style={{ fontSize: '0.75rem' }}>AVAILABLE CAPACITY</div>
-              <div className="font-display fw-900 gradient-text-cyber" style={{ fontSize: '2rem' }}>
-                {location.available_slots} <span style={{ fontSize: '1rem', color: '#94a3b8' }}>/ {location.total_slots} Bays</span>
+            <div className="d-inline-flex flex-column align-items-lg-end p-3 px-4 rounded-3" style={{ background: 'var(--primary-50)', border: '1px solid var(--primary-100)' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--primary)', letterSpacing: '0.04em' }}>AVAILABLE CAPACITY</div>
+              <div className="fw-800" style={{ fontSize: '2rem', color: 'var(--primary)' }}>
+                {location.available_slots} <span style={{ fontSize: '1rem', color: 'var(--text-secondary)', fontWeight: 500 }}>/ {location.total_slots} Bays</span>
               </div>
             </div>
           </Col>
@@ -170,7 +167,7 @@ export default function ParkingDetail() {
       </div>
 
       {error && (
-        <Alert variant="danger" dismissible onClose={() => setError('')} className="cyber-card mb-4 border-danger text-white" style={{ background: 'rgba(255, 51, 102, 0.15)' }}>
+        <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4">
           {error}
         </Alert>
       )}
@@ -179,13 +176,13 @@ export default function ParkingDetail() {
         {/* ── Left Sidebar: Reservation Control & Pricing ───── */}
         <Col lg={4}>
           {/* Reservation Config Card */}
-          <div className="cyber-card p-4 mb-4">
-            <h5 className="fw-700 text-white mb-3 d-flex align-items-center gap-2">
-              <FaClock color="#00f2fe" /> Reservation Window
+          <div className="ps-card p-4 mb-4">
+            <h5 className="fw-700 mb-3 d-flex align-items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+              <FaClock className="text-primary" /> Reservation Window
             </h5>
 
             <Form.Group className="mb-3">
-              <Form.Label className="form-label">Date of Arrival</Form.Label>
+              <Form.Label className="ps-form-label">Date of Arrival</Form.Label>
               <Form.Control 
                 type="date" 
                 value={bookingDate} 
@@ -196,7 +193,7 @@ export default function ParkingDetail() {
 
             <Row className="g-2 mb-3">
               <Col xs={6}>
-                <Form.Label className="form-label">Check-In</Form.Label>
+                <Form.Label className="ps-form-label">Check-In</Form.Label>
                 <Form.Control 
                   type="time" 
                   value={startTime} 
@@ -204,7 +201,7 @@ export default function ParkingDetail() {
                 />
               </Col>
               <Col xs={6}>
-                <Form.Label className="form-label">Exit By</Form.Label>
+                <Form.Label className="ps-form-label">Exit By</Form.Label>
                 <Form.Control 
                   type="time" 
                   value={endTime} 
@@ -214,7 +211,7 @@ export default function ParkingDetail() {
             </Row>
 
             <Form.Group className="mb-4">
-              <Form.Label className="form-label">Vehicle Filter</Form.Label>
+              <Form.Label className="ps-form-label">Vehicle Filter</Form.Label>
               <Form.Select 
                 value={vehicleType} 
                 onChange={(e) => setVehicleType(e.target.value)}
@@ -227,7 +224,7 @@ export default function ParkingDetail() {
             </Form.Group>
 
             <Button 
-              className="btn-cyber-primary w-100 py-2" 
+              className="ps-btn-primary w-100 py-2.5" 
               onClick={checkAvailability} 
               disabled={slotsLoading}
             >
@@ -238,45 +235,44 @@ export default function ParkingDetail() {
 
           {/* Selected Bay Confirmation Card */}
           {selectedSlot ? (
-            <div className="cyber-card p-4 animate-fade-up" style={{
-              background: 'linear-gradient(135deg, rgba(16, 231, 157, 0.1), rgba(10, 16, 38, 0.95))',
-              borderColor: 'rgba(16, 231, 157, 0.4)'
-            }}>
+            <div className="ps-card p-4 animate-fade-up" style={{ border: '2px solid var(--primary)' }}>
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="badge-cyber badge-cyber-emerald">BAY LOCKED</span>
-                <span className="font-mono fw-800 text-info" style={{ fontSize: '1.2rem' }}>
+                <span className="ps-badge ps-badge-success">
+                  <span className="ps-badge-dot"></span> BAY LOCKED
+                </span>
+                <span className="fw-800" style={{ fontSize: '1.2rem', color: 'var(--primary)' }}>
                   {formatCurrency(selectedSlot.price_per_hour)}/hr
                 </span>
               </div>
 
-              <div className="font-mono fw-900 text-white mb-2" style={{ fontSize: '1.6rem' }}>
+              <div className="fw-800 mb-2" style={{ fontSize: '1.6rem', color: 'var(--text-primary)' }}>
                 BAY #{selectedSlot.slot_number}
               </div>
 
-              <div className="d-flex flex-column gap-2 mb-3 pb-3 border-bottom border-secondary border-opacity-25" style={{ fontSize: '0.88rem', color: '#cbd5e1' }}>
+              <div className="d-flex flex-column gap-2 mb-3 pb-3 border-bottom" style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
                 <div className="d-flex justify-content-between">
-                  <span className="text-muted">Vehicle Type:</span>
-                  <span className="fw-600">{VEHICLE_ICONS[selectedSlot.vehicle_type] || '🚗'} {selectedSlot.vehicle_type}</span>
+                  <span>Vehicle Type:</span>
+                  <span className="fw-600" style={{ color: 'var(--text-primary)' }}>{VEHICLE_ICONS[selectedSlot.vehicle_type] || '🚗'} {selectedSlot.vehicle_type}</span>
                 </div>
                 <div className="d-flex justify-content-between">
-                  <span className="text-muted">Reserved Date:</span>
-                  <span className="font-mono">{bookingDate}</span>
+                  <span>Reserved Date:</span>
+                  <span className="fw-600" style={{ color: 'var(--text-primary)' }}>{bookingDate}</span>
                 </div>
                 <div className="d-flex justify-content-between">
-                  <span className="text-muted">Window:</span>
-                  <span className="font-mono text-warning">{startTime} — {endTime}</span>
+                  <span>Window:</span>
+                  <span className="fw-600 text-warning">{startTime} — {endTime}</span>
                 </div>
               </div>
 
               <div className="d-flex justify-content-between align-items-baseline mb-4">
-                <span className="text-muted">Total Payable:</span>
-                <span className="font-display fw-900 gradient-text-emerald" style={{ fontSize: '1.8rem' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Total Payable:</span>
+                <span className="fw-800" style={{ fontSize: '1.8rem', color: 'var(--primary)' }}>
                   {formatCurrency(calculateTotal())}
                 </span>
               </div>
 
               <Button 
-                className="btn-cyber-emerald w-100 py-3 fw-bold"
+                className="ps-btn-primary w-100 py-3 fw-bold"
                 onClick={handleBooking}
                 disabled={bookingLoading}
               >
@@ -285,10 +281,10 @@ export default function ParkingDetail() {
               </Button>
             </div>
           ) : (
-            <div className="cyber-card p-4 text-center">
-              <FaParking size={36} className="text-muted mb-2" />
-              <div className="fw-700 text-white mb-1">No Bay Selected</div>
-              <p style={{ color: '#94a3b8', fontSize: '0.82rem', marginBottom: 0 }}>
+            <div className="ps-card p-4 text-center">
+              <FaParking size={36} style={{ color: 'var(--border-medium)' }} className="mb-2" />
+              <div className="fw-700 mb-1" style={{ color: 'var(--text-primary)' }}>No Bay Selected</div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 0 }}>
                 Click any available <span className="text-success fw-bold">GREEN</span> bay on the floor plan to inspect rates and book.
               </p>
             </div>
@@ -297,39 +293,39 @@ export default function ParkingDetail() {
 
         {/* ── Right Column: Interactive Parking Lot Floor Plan ─ */}
         <Col lg={8}>
-          <div className="cyber-card p-4">
+          <div className="ps-card p-4">
             {/* Terminal Top Bar */}
-            <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-4 border-bottom border-secondary border-opacity-25">
+            <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-4 border-bottom">
               <div className="d-flex align-items-center gap-2">
-                <FaParking color="#00f2fe" size={20} />
-                <h5 className="fw-700 text-white mb-0">Floor Layout Plan</h5>
+                <FaParking className="text-primary" size={20} />
+                <h5 className="fw-700 mb-0" style={{ color: 'var(--text-primary)' }}>Floor Layout Plan</h5>
               </div>
 
               {/* Status Legend */}
-              <div className="d-flex gap-3 font-mono" style={{ fontSize: '0.74rem' }}>
+              <div className="d-flex gap-3" style={{ fontSize: '0.8rem' }}>
                 <span className="d-inline-flex align-items-center gap-1">
-                  <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--emerald-neon)' }}></span>
-                  <span className="text-muted">Available</span>
+                  <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--success)' }}></span>
+                  <span style={{ color: 'var(--text-secondary)' }}>Available</span>
                 </span>
                 <span className="d-inline-flex align-items-center gap-1">
-                  <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--rose-neon)' }}></span>
-                  <span className="text-muted">Occupied</span>
+                  <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--danger)' }}></span>
+                  <span style={{ color: 'var(--text-secondary)' }}>Occupied</span>
                 </span>
                 <span className="d-inline-flex align-items-center gap-1">
-                  <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--cyan-neon)' }}></span>
-                  <span className="text-muted">Selected</span>
+                  <span style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--primary)' }}></span>
+                  <span style={{ color: 'var(--text-secondary)' }}>Selected</span>
                 </span>
               </div>
             </div>
 
             {/* Entry Gate Indicator */}
             <div className="text-center mb-4">
-              <div className="d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill" style={{
-                background: 'rgba(0, 242, 254, 0.08)',
-                border: '1px solid rgba(0, 242, 254, 0.3)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.76rem',
-                color: 'var(--cyan-neon)'
+              <div className="d-inline-flex align-items-center gap-2 px-4 py-1.5 rounded-pill" style={{
+                background: 'var(--primary-50)',
+                border: '1px solid var(--primary-100)',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                color: 'var(--primary)'
               }}>
                 <span>⬇ FASTTAG ENTRY BOOM BARRIER</span>
               </div>
@@ -338,12 +334,12 @@ export default function ParkingDetail() {
             {/* Slot Grid Floor Layout */}
             {slotsLoading ? (
               <div className="text-center py-5">
-                <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
-                <p className="mt-2 text-muted font-mono" style={{ fontSize: '0.85rem' }}>Refreshing bay sensors...</p>
+                <Spinner animation="border" style={{ color: 'var(--primary)' }} />
+                <p className="mt-2" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Refreshing bay sensors...</p>
               </div>
             ) : slots.length === 0 ? (
               <div className="text-center py-5">
-                <p className="text-muted">No slots available for the selected filters.</p>
+                <p style={{ color: 'var(--text-secondary)' }}>No slots available for the selected filters.</p>
               </div>
             ) : (
               <Row className="g-3">
@@ -370,13 +366,13 @@ export default function ParkingDetail() {
                       >
                         {/* Bay Header */}
                         <div className="d-flex justify-content-between align-items-center">
-                          <span className="font-mono fw-800" style={{ 
+                          <span className="fw-800" style={{ 
                             fontSize: '1rem', 
-                            color: isSelected ? 'var(--cyan-neon)' : isAvailable ? '#ffffff' : '#64748b' 
+                            color: isSelected ? 'var(--primary)' : isAvailable ? '#15803D' : '#991B1B' 
                           }}>
                             {slot.slot_number}
                           </span>
-                          {isEV && <FaBolt color="#00f2fe" size={12} title="EV Bay" />}
+                          {isEV && <FaBolt color="#2563EB" size={12} title="EV Bay" />}
                         </div>
 
                         {/* Vehicle Icon & Type */}
@@ -384,19 +380,19 @@ export default function ParkingDetail() {
                           <div style={{ fontSize: '1.4rem' }}>
                             {VEHICLE_ICONS[slot.vehicle_type] || '🚗'}
                           </div>
-                          <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
                             {slot.vehicle_type}
                           </div>
                         </div>
 
                         {/* Status / Rate Footer */}
-                        <div className="pt-1 border-top border-white border-opacity-10">
+                        <div className="pt-1.5 border-top" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
                           {isMaintenance ? (
-                            <span className="badge-cyber badge-cyber-rose py-0 px-1" style={{ fontSize: '0.65rem' }}>SERVICE</span>
+                            <span className="ps-badge ps-badge-danger py-0 px-1" style={{ fontSize: '0.65rem' }}>SERVICE</span>
                           ) : !isAvailable ? (
-                            <span className="badge-cyber badge-cyber-rose py-0 px-1" style={{ fontSize: '0.65rem' }}>OCCUPIED</span>
+                            <span className="ps-badge ps-badge-danger py-0 px-1" style={{ fontSize: '0.65rem' }}>OCCUPIED</span>
                           ) : (
-                            <span className="font-mono fw-700" style={{ fontSize: '0.8rem', color: 'var(--emerald-neon)' }}>
+                            <span className="fw-700" style={{ fontSize: '0.82rem', color: '#15803D' }}>
                               ₹{slot.price_per_hour}/h
                             </span>
                           )}
@@ -410,12 +406,12 @@ export default function ParkingDetail() {
 
             {/* Exit Gate Indicator */}
             <div className="text-center mt-4 pt-2">
-              <div className="d-inline-flex align-items-center gap-2 px-4 py-1 rounded-pill" style={{
-                background: 'rgba(16, 231, 157, 0.08)',
-                border: '1px solid rgba(16, 231, 157, 0.3)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.76rem',
-                color: 'var(--emerald-neon)'
+              <div className="d-inline-flex align-items-center gap-2 px-4 py-1.5 rounded-pill" style={{
+                background: 'var(--success-light)',
+                border: '1px solid #BBF7D0',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                color: 'var(--success)'
               }}>
                 <span>⬆ CONTACTLESS AUTOMATED EXIT BARRIER</span>
               </div>

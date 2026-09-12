@@ -1,6 +1,6 @@
 /**
- * Login Page — V3 Cyber-Obsidian Authentication Terminal
- * 1-click demo credentials autofill, glowing glass form, and instant security token sync.
+ * Login Page — Professional Authentication Terminal
+ * 1-click demo credentials autofill, clean modern card, and secure session management.
  */
 
 import { useState } from 'react';
@@ -34,14 +34,21 @@ export default function Login() {
     }
   };
 
-  const autofillUser = () => {
-    setEmail('user@example.com');
-    setPassword('user123');
-  };
+  const handleQuickLogin = async (demoEmail, demoPassword) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError('');
+    setLoading(true);
 
-  const autofillAdmin = () => {
-    setEmail('admin@example.com');
-    setPassword('admin123');
+    try {
+      const userData = await login(demoEmail, demoPassword);
+      if (userData.role === 'admin') navigate('/admin/dashboard');
+      else navigate('/user/dashboard');
+    } catch (err) {
+      setError(getErrorMessage(err));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,28 +58,33 @@ export default function Login() {
           <Col md={8} lg={5}>
             {/* Brand Header */}
             <div className="text-center mb-4 animate-fade-down">
-              <div className="brand-icon-box mx-auto mb-3" style={{ width: '56px', height: '56px' }}>
+              <div style={{
+                width: '56px', height: '56px', borderRadius: '14px',
+                background: 'var(--primary-50)', color: 'var(--primary)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 1rem'
+              }}>
                 <FaCar size={26} />
               </div>
-              <h2 className="fw-900 text-white mb-1" style={{ fontSize: '2rem' }}>
-                Sign In to <span className="gradient-text-cyber">ParkSite</span>
+              <h2 className="fw-800 mb-1" style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>
+                Sign In to <span style={{ color: 'var(--primary)' }}>ParkSite</span>
               </h2>
-              <p style={{ color: '#94a3b8', fontSize: '0.92rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem' }}>
                 Access live slot reservations and your digital QR keycard
               </p>
             </div>
 
-            {/* Main Auth Cyber Card */}
-            <div className="cyber-card p-4 p-md-5 animate-fade-up">
+            {/* Main Auth Card */}
+            <div className="ps-card p-4 p-md-5 animate-fade-up">
               {error && (
-                <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4 border-danger" style={{ background: 'rgba(255, 51, 102, 0.15)', color: '#ff6b8b' }}>
+                <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4">
                   {error}
                 </Alert>
               )}
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                  <Form.Label className="form-label">Email Address</Form.Label>
+                  <Form.Label className="ps-form-label">Email Address</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="email"
@@ -82,12 +94,12 @@ export default function Login() {
                       required
                       style={{ paddingLeft: '2.6rem' }}
                     />
-                    <FaEnvelope style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                    <FaEnvelope style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                   </div>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label className="form-label">Password</Form.Label>
+                  <Form.Label className="ps-form-label">Password</Form.Label>
                   <div className="position-relative">
                     <Form.Control
                       type="password"
@@ -97,13 +109,13 @@ export default function Login() {
                       required
                       style={{ paddingLeft: '2.6rem' }}
                     />
-                    <FaLock style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                    <FaLock style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                   </div>
                 </Form.Group>
 
                 <Button 
                   type="submit" 
-                  className="btn-cyber-primary w-100 py-3 mb-3 fw-bold" 
+                  className="ps-btn-primary w-100 py-3 mb-3 fw-bold" 
                   disabled={loading}
                 >
                   {loading ? <Spinner size="sm" className="me-2" /> : <FaSignInAlt className="me-2" />}
@@ -111,41 +123,48 @@ export default function Login() {
                 </Button>
               </Form>
 
-              <div className="text-center pt-2 border-top border-secondary border-opacity-25">
-                <p style={{ color: '#94a3b8', fontSize: '0.88rem' }} className="mb-0">
+              <div className="text-center pt-3 border-top border-light">
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }} className="mb-0">
                   New commuter?{' '}
-                  <Link to="/register" style={{ color: 'var(--cyan-neon)', fontWeight: 600, textDecoration: 'none' }}>
+                  <Link to="/register" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
                     Create Account Free <FaArrowRight size={11} />
                   </Link>
                 </p>
               </div>
             </div>
 
-            {/* College Demo Quick Fill Bar */}
-            <div className="mt-4 p-3 rounded-4 glass-panel border border-secondary border-opacity-25 text-center animate-fade-up delay-2">
+            {/* College Demo Quick Access Bar */}
+            <div className="mt-4 p-3 rounded-3 ps-card text-center animate-fade-up delay-2" style={{ background: 'var(--bg-white)' }}>
               <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
-                <FaKey color="#ffb703" size={13} />
-                <span className="font-mono fw-700" style={{ fontSize: '0.75rem', color: '#ffb703', letterSpacing: '0.06em' }}>
-                  COLLEGE DEMO 1-CLICK QUICK ACCESS
+                <FaKey color="#D97706" size={13} />
+                <span className="fw-700" style={{ fontSize: '0.75rem', color: '#D97706', letterSpacing: '0.04em' }}>
+                  COLLEGE DEMO 1-CLICK INSTANT LOGIN
                 </span>
               </div>
-              <div className="d-flex gap-2 justify-content-center">
+              <div className="d-flex gap-2 justify-content-center flex-wrap">
                 <Button 
-                  onClick={autofillUser} 
+                  type="button"
+                  onClick={() => handleQuickLogin('user@example.com', 'user123')} 
                   size="sm" 
-                  className="btn-cyber-outline py-1 px-3" 
-                  style={{ fontSize: '0.78rem' }}
+                  disabled={loading}
+                  className="ps-btn-outline py-2 px-3 d-flex align-items-center gap-1.5" 
+                  style={{ fontSize: '0.82rem', fontWeight: 600 }}
                 >
-                  <FaUserCheck className="me-1 text-success" /> Fill Demo User
+                  <FaUserCheck className="text-success" /> Login as Demo User
                 </Button>
                 <Button 
-                  onClick={autofillAdmin} 
+                  type="button"
+                  onClick={() => handleQuickLogin('admin@example.com', 'admin123')} 
                   size="sm" 
-                  className="btn-cyber-outline py-1 px-3" 
-                  style={{ fontSize: '0.78rem' }}
+                  disabled={loading}
+                  className="ps-btn-outline py-2 px-3 d-flex align-items-center gap-1.5" 
+                  style={{ fontSize: '0.82rem', fontWeight: 600 }}
                 >
-                  <FaShieldAlt className="me-1 text-warning" /> Fill Demo Admin
+                  <FaShieldAlt className="text-warning" /> Login as Demo Admin
                 </Button>
+              </div>
+              <div className="mt-2" style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
+                Auto-fills credentials and signs in with 1 click
               </div>
             </div>
           </Col>

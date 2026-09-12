@@ -1,11 +1,11 @@
 /**
- * Register Page — V3 Cyber-Obsidian Commuter Registration
+ * Register Page — Professional Commuter Registration
  */
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { FaUserPlus, FaCar, FaUser, FaEnvelope, FaLock, FaPhone, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
+import { FaUserPlus, FaCar, FaUser, FaEnvelope, FaLock, FaPhone, FaArrowRight } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { getErrorMessage } from '../../utils/helpers';
 
@@ -51,21 +51,26 @@ export default function Register() {
           <Col md={8} lg={5}>
             {/* Header */}
             <div className="text-center mb-4 animate-fade-down">
-              <div className="brand-icon-box mx-auto mb-3" style={{ width: '56px', height: '56px' }}>
+              <div style={{
+                width: '56px', height: '56px', borderRadius: '14px',
+                background: 'var(--primary-50)', color: 'var(--primary)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 1rem'
+              }}>
                 <FaCar size={26} />
               </div>
-              <h2 className="fw-900 text-white mb-1" style={{ fontSize: '2rem' }}>
-                Join <span className="gradient-text-cyber">ParkSite</span>
+              <h2 className="fw-800 mb-1" style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>
+                Join <span style={{ color: 'var(--primary)' }}>ParkSite</span>
               </h2>
-              <p style={{ color: '#94a3b8', fontSize: '0.92rem' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem' }}>
                 Unlock instant bay booking and contactless dynamic QR keycards
               </p>
             </div>
 
-            {/* Main Cyber Card */}
-            <div className="cyber-card p-4 p-md-5 animate-fade-up">
+            {/* Main Card */}
+            <div className="ps-card p-4 p-md-5 animate-fade-up">
               {error && (
-                <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4 border-danger" style={{ background: 'rgba(255, 51, 102, 0.15)', color: '#ff6b8b' }}>
+                <Alert variant="danger" dismissible onClose={() => setError('')} className="mb-4">
                   {error}
                 </Alert>
               )}
@@ -75,7 +80,7 @@ export default function Register() {
                   const Icon = f.icon;
                   return (
                     <Form.Group className="mb-3" key={f.name}>
-                      <Form.Label className="form-label">{f.label}</Form.Label>
+                      <Form.Label className="ps-form-label">{f.label}</Form.Label>
                       <div className="position-relative">
                         <Form.Control 
                           type={f.type} 
@@ -87,7 +92,7 @@ export default function Register() {
                           minLength={f.minLength}
                           style={{ paddingLeft: '2.6rem' }} 
                         />
-                        <Icon style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+                        <Icon style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                       </div>
                     </Form.Group>
                   );
@@ -95,18 +100,18 @@ export default function Register() {
 
                 <Button 
                   type="submit" 
-                  className="btn-cyber-primary w-100 py-3 mb-3 fw-bold mt-2" 
+                  className="ps-btn-primary w-100 py-3 mb-3 fw-bold mt-2" 
                   disabled={loading}
                 >
                   {loading ? <Spinner size="sm" className="me-2" /> : <FaUserPlus className="me-2" />}
-                  {loading ? 'Creating Commuter Pass...' : 'Create Free Account'}
+                  {loading ? 'Creating Account...' : 'Create Free Account'}
                 </Button>
               </Form>
 
-              <div className="text-center pt-2 border-top border-secondary border-opacity-25">
-                <p style={{ color: '#94a3b8', fontSize: '0.88rem' }} className="mb-0">
+              <div className="text-center pt-3 border-top border-light">
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }} className="mb-0">
                   Already registered?{' '}
-                  <Link to="/login" style={{ color: 'var(--cyan-neon)', fontWeight: 600, textDecoration: 'none' }}>
+                  <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
                     Sign In <FaArrowRight size={11} />
                   </Link>
                 </p>

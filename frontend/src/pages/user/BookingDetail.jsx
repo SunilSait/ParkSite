@@ -65,8 +65,8 @@ export default function BookingDetail() {
   if (loading) {
     return (
       <Container className="py-5 text-center">
-        <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
-        <p className="mt-2 text-muted font-mono">Generating digital keycard pass...</p>
+        <Spinner animation="border" style={{ color: 'var(--primary)', width: '3rem', height: '3rem' }} />
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Generating digital keycard pass...</p>
       </Container>
     );
   }
@@ -74,10 +74,10 @@ export default function BookingDetail() {
   if (!booking) {
     return (
       <Container className="py-5 text-center">
-        <div className="cyber-card p-5 mx-auto" style={{ maxWidth: '500px' }}>
-          <h4 className="text-white fw-700">Parking Pass Not Found</h4>
+        <div className="ps-card p-5 mx-auto" style={{ maxWidth: '500px' }}>
+          <h4 className="fw-700" style={{ color: 'var(--text-primary)' }}>Parking Pass Not Found</h4>
           {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
-          <Button onClick={() => navigate('/user/dashboard')} className="btn-cyber-primary mt-3">
+          <Button onClick={() => navigate('/user/dashboard')} className="ps-btn-primary mt-3">
             Return to Dashboard
           </Button>
         </div>
@@ -92,8 +92,8 @@ export default function BookingDetail() {
       {/* Navigation link */}
       <button 
         onClick={() => navigate('/user/dashboard')} 
-        className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0" 
-        style={{ color: 'var(--cyan-neon)', fontSize: '0.9rem', background: 'transparent' }}
+        className="btn p-0 mb-3 d-inline-flex align-items-center gap-2 border-0 text-decoration-none" 
+        style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', fontWeight: 600, background: 'transparent' }}
       >
         <FaArrowLeft /> Back to Dashboard
       </button>
@@ -112,30 +112,33 @@ export default function BookingDetail() {
             <div className="ticket-notch-right"></div>
 
             {/* Pass Header */}
-            <div className="p-4 pb-3 d-flex justify-content-between align-items-start border-bottom border-white border-opacity-10">
+            <div className="p-4 pb-3 d-flex justify-content-between align-items-start border-bottom" style={{ borderColor: '#E2E8F0' }}>
               <div>
                 <div className="d-flex align-items-center gap-2 mb-1">
-                  <span className="brand-text" style={{ fontSize: '1.2rem' }}>
-                    Park<span className="gradient-text-cyber">Site</span>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaCar size={16} color="var(--primary)" />
+                  </div>
+                  <span className="fw-800" style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
+                    Park<span style={{ color: 'var(--primary)' }}>Site</span>
                   </span>
-                  <span className="badge-cyber badge-cyber-cyan py-0 px-2" style={{ fontSize: '0.65rem' }}>
-                    DIGITAL VIP PASS
+                  <span className="ps-badge ps-badge-primary py-0 px-2" style={{ fontSize: '0.7rem' }}>
+                    SMART KEYCARD PASS
                   </span>
                 </div>
-                <div className="font-mono text-muted" style={{ fontSize: '0.75rem' }}>
-                  AUTOMATED BARRIER ACCESS TOKEN
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                  AUTOMATED SENSOR & BARRIER ACCESS TOKEN
                 </div>
               </div>
 
               <div className="text-end">
-                <span className={`badge-cyber ${
-                  booking.status === 'confirmed' ? 'badge-cyber-emerald' :
-                  booking.status === 'cancelled' ? 'badge-cyber-rose' :
-                  'badge-cyber-cyan'
+                <span className={`ps-badge ${
+                  booking.status === 'confirmed' ? 'ps-badge-success' :
+                  booking.status === 'cancelled' ? 'ps-badge-danger' :
+                  'ps-badge-primary'
                 }`}>
                   {booking.status?.toUpperCase()}
                 </span>
-                <div className="font-mono fw-800 text-white mt-1" style={{ fontSize: '1.2rem' }}>
+                <div className="fw-800 mt-1" style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}>
                   {formatCurrency(booking.total_amount)}
                 </div>
               </div>
@@ -144,53 +147,60 @@ export default function BookingDetail() {
             {/* Pass Body Content */}
             <div className="p-4">
               <Row className="g-4 align-items-center">
-                {/* Left Side: Booking Telemetry Details */}
+                {/* Left Side: Booking Details */}
                 <Col md={7}>
                   <div className="mb-3">
-                    <div className="font-mono text-muted" style={{ fontSize: '0.72rem' }}>FACILITY LOCATION</div>
-                    <div className="fw-700 text-white" style={{ fontSize: '1.1rem' }}>
+                    <div className="fw-700 text-uppercase mb-1" style={{ fontSize: '0.72rem', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
+                      FACILITY LOCATION
+                    </div>
+                    <div className="fw-800" style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
                       {booking.location?.name}
                     </div>
-                    <div style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
-                      <FaMapMarkerAlt className="text-danger me-1" /> {booking.location?.address}
+                    <div style={{ color: 'var(--text-secondary)', fontSize: '0.84rem' }} className="d-flex align-items-center gap-1 mt-0.5">
+                      <FaMapMarkerAlt className="text-danger flex-shrink-0" /> {booking.location?.address}
                     </div>
                   </div>
 
                   <Row className="g-3 mb-3">
                     <Col xs={6}>
-                      <div className="font-mono text-muted" style={{ fontSize: '0.72rem' }}>RESERVED BAY</div>
-                      <div className="font-mono fw-800 text-info" style={{ fontSize: '1.4rem' }}>
+                      <div className="fw-700 text-uppercase mb-1" style={{ fontSize: '0.72rem', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
+                        RESERVED BAY
+                      </div>
+                      <div className="fw-800" style={{ fontSize: '1.5rem', color: 'var(--primary)' }}>
                         BAY #{booking.slot?.slot_number}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#cbd5e1' }}>
-                        {VEHICLE_ICONS[booking.slot?.vehicle_type] || '🚗'} {booking.slot?.vehicle_type}
+                      <div className="d-inline-flex align-items-center gap-1 mt-1" style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', background: '#F1F5F9', padding: '2px 8px', borderRadius: '6px' }}>
+                        {VEHICLE_ICONS[booking.slot?.vehicle_type] || '🚗'} {booking.slot?.vehicle_type?.toUpperCase()}
                       </div>
                     </Col>
 
                     <Col xs={6}>
-                      <div className="font-mono text-muted" style={{ fontSize: '0.72rem' }}>PERMIT DATE</div>
-                      <div className="font-mono fw-700 text-white" style={{ fontSize: '0.95rem' }}>
+                      <div className="fw-700 text-uppercase mb-1" style={{ fontSize: '0.72rem', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
+                        PERMIT DATE & WINDOW
+                      </div>
+                      <div className="fw-700" style={{ fontSize: '0.98rem', color: 'var(--text-primary)' }}>
                         {formatDate(booking.booking_date)}
                       </div>
-                      <div className="font-mono text-warning" style={{ fontSize: '0.82rem' }}>
+                      <div className="fw-600 mt-1" style={{ fontSize: '0.84rem', color: '#D97706' }}>
+                        <FaClock className="me-1" size={12} />
                         {formatTime(booking.start_time)} — {formatTime(booking.end_time)}
                       </div>
                     </Col>
                   </Row>
 
-                  <div className="p-2 px-3 rounded-3 glass-panel d-flex justify-content-between align-items-center">
-                    <span className="font-mono text-muted" style={{ fontSize: '0.75rem' }}>PASS REFERENCE</span>
-                    <span className="font-mono fw-800 text-success" style={{ fontSize: '0.85rem' }}>
+                  <div className="p-2.5 px-3 rounded-3 d-flex justify-content-between align-items-center" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
+                    <span className="fw-600 text-uppercase" style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>PASS REFERENCE</span>
+                    <span className="font-mono fw-800" style={{ fontSize: '0.88rem', color: 'var(--text-primary)' }}>
                       {booking.booking_reference}
                     </span>
                   </div>
                 </Col>
 
-                {/* Right Side: High-Tech QR Scanner Code */}
+                {/* Right Side: QR Scanner Box */}
                 <Col md={5} className="text-center">
-                  <div className="p-3 rounded-4 glass-panel d-inline-block border border-info border-opacity-30">
+                  <div className="p-3 rounded-4 d-inline-block" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0' }}>
                     {booking.qr_code ? (
-                      <div className="position-relative">
+                      <div>
                         <img 
                           src={booking.qr_code} 
                           alt="Dynamic QR Keycard" 
@@ -199,18 +209,19 @@ export default function BookingDetail() {
                             height: '160px', 
                             borderRadius: '10px',
                             background: '#ffffff',
-                            padding: '6px'
+                            padding: '6px',
+                            border: '1px solid #E2E8F0',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
                           }} 
                         />
-                        <div className="radar-scan-line"></div>
                       </div>
                     ) : (
-                      <div className="p-4 text-muted font-mono" style={{ fontSize: '0.75rem' }}>
+                      <div className="p-4" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                         <FaQrcode size={48} className="mb-2" />
-                        <div>QR Token Generating</div>
+                        <div>Generating QR Token...</div>
                       </div>
                     )}
-                    <div className="font-mono mt-2" style={{ fontSize: '0.7rem', color: 'var(--cyan-neon)' }}>
+                    <div className="fw-700 mt-2" style={{ fontSize: '0.72rem', letterSpacing: '0.04em', color: 'var(--text-secondary)' }}>
                       HOLD TO GATE SCANNER
                     </div>
                   </div>
@@ -221,12 +232,12 @@ export default function BookingDetail() {
               <div className="ticket-perforation"></div>
 
               {/* Barrier Access Guide */}
-              <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 text-muted" style={{ fontSize: '0.8rem' }}>
+              <div className="d-flex align-items-center justify-content-between flex-wrap gap-2" style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                 <div className="d-flex align-items-center gap-2">
-                  <FaShieldAlt color="#10e79d" />
+                  <FaShieldAlt color="var(--success)" />
                   <span>Encrypted 256-Bit Pass • Contactless Sensor Barrier Lift</span>
                 </div>
-                <div className="font-mono text-info">
+                <div className="font-mono fw-600" style={{ color: 'var(--text-secondary)' }}>
                   TOKEN ID: #{String(booking.id).padStart(6, '0')}
                 </div>
               </div>
@@ -236,19 +247,20 @@ export default function BookingDetail() {
           {/* Action Buttons */}
           <div className="d-flex gap-3 justify-content-center flex-wrap">
             {booking.qr_code && (
-              <Button onClick={downloadQR} className="btn-cyber-primary py-2 px-4">
+              <Button onClick={downloadQR} className="ps-btn-primary py-2.5 px-4">
                 <FaDownload className="me-2" /> Save Keycard PNG
               </Button>
             )}
-            <Button onClick={handlePrint} className="btn-cyber-outline py-2 px-4">
+            <Button onClick={handlePrint} className="ps-btn-outline py-2.5 px-4">
               <FaPrint className="me-2" /> Print Pass Receipt
             </Button>
             {isConfirmed && (
               <Button 
+                variant="outline-danger"
                 onClick={handleCancel} 
                 disabled={cancelLoading}
-                className="btn btn-outline-danger rounded-3 py-2 px-3 d-inline-flex align-items-center gap-2"
-                style={{ border: '1px solid rgba(255, 51, 102, 0.4)', background: 'rgba(255, 51, 102, 0.08)' }}
+                className="py-2.5 px-3 d-inline-flex align-items-center gap-2"
+                style={{ borderRadius: 'var(--radius-sm)' }}
               >
                 {cancelLoading ? <Spinner size="sm" /> : <FaTimesCircle />}
                 Cancel Pass

@@ -45,8 +45,8 @@ export default function Payment() {
   if (loading) {
     return (
       <Container className="py-5 text-center">
-        <Spinner animation="border" style={{ color: 'var(--cyan-neon)' }} />
-        <p className="mt-2 text-muted font-mono">Initializing secure payment terminal...</p>
+        <Spinner animation="border" style={{ color: 'var(--primary)', width: '3rem', height: '3rem' }} />
+        <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>Initializing secure payment terminal...</p>
       </Container>
     );
   }
@@ -56,26 +56,22 @@ export default function Payment() {
       <Container className="py-5">
         <Row className="justify-content-center">
           <Col md={6} lg={5}>
-            <div className="cyber-card text-center p-5 animate-fade-up" style={{
-              background: 'linear-gradient(135deg, rgba(16, 231, 157, 0.15), rgba(7, 12, 34, 0.98))',
-              borderColor: 'var(--emerald-neon)',
-              boxShadow: '0 0 50px rgba(16, 231, 157, 0.25)'
-            }}>
+            <div className="ps-card text-center p-5 animate-fade-up">
               <div style={{
-                width: '80px', height: '80px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #10e79d, #05b171)',
+                width: '76px', height: '76px', borderRadius: '50%',
+                background: '#F0FDF4',
+                border: '2px solid #BBF7D0',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 1.5rem',
-                boxShadow: '0 0 35px rgba(16, 231, 157, 0.4)',
               }}>
-                <FaCheckCircle size={38} color="#042416" />
+                <FaCheckCircle size={36} color="var(--success)" />
               </div>
-              <span className="badge-cyber badge-cyber-emerald mb-2">TRANSACTION CONFIRMED</span>
-              <h2 className="fw-900 text-white mb-2">Payment Settled!</h2>
-              <p style={{ color: '#cbd5e1', fontSize: '0.92rem' }}>
+              <span className="ps-badge ps-badge-success mb-2">TRANSACTION CONFIRMED</span>
+              <h2 className="fw-800 mb-2" style={{ color: 'var(--text-primary)' }}>Payment Settled!</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem' }}>
                 Your smart bay is reserved. Digital QR pass is issued and synced with barrier nodes.
               </p>
-              <div className="d-flex align-items-center justify-content-center gap-2 text-info font-mono" style={{ fontSize: '0.8rem' }}>
+              <div className="d-flex align-items-center justify-content-center gap-2" style={{ color: 'var(--primary)', fontSize: '0.85rem' }}>
                 <Spinner size="sm" />
                 <span>Redirecting to your digital boarding pass...</span>
               </div>
@@ -96,20 +92,22 @@ export default function Payment() {
     <Container className="py-5">
       <Row className="justify-content-center">
         <Col md={7} lg={5}>
-          <div className="cyber-card p-4 p-md-5">
+          <div className="ps-card p-4 p-md-5">
             {/* Terminal Header */}
-            <div className="text-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+            <div className="text-center mb-4 pb-3 border-bottom">
               <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
-                <FaShieldAlt color="#00f2fe" size={18} />
-                <span className="font-mono" style={{ fontSize: '0.78rem', color: 'var(--cyan-neon)' }}>
+                <FaShieldAlt color="var(--success)" size={16} />
+                <span className="fw-700" style={{ fontSize: '0.78rem', color: 'var(--success)', letterSpacing: '0.04em' }}>
                   256-BIT ENCRYPTED DEMO GATEWAY
                 </span>
               </div>
-              <div className="font-mono text-muted" style={{ fontSize: '0.8rem' }}>TOTAL PAYABLE TARIFF</div>
-              <div className="font-display fw-900 gradient-text-emerald" style={{ fontSize: '3.2rem', lineHeight: 1.1 }}>
+              <div className="fw-700 text-uppercase" style={{ fontSize: '0.75rem', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
+                TOTAL PAYABLE TARIFF
+              </div>
+              <div className="fw-900" style={{ fontSize: '3rem', lineHeight: 1.1, color: 'var(--primary)', margin: '0.25rem 0' }}>
                 {formatCurrency(booking?.total_amount)}
               </div>
-              <div style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.4rem' }}>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.86rem' }}>
                 {booking?.location?.name} • Bay #{booking?.slot?.slot_number}
               </div>
             </div>
@@ -122,7 +120,7 @@ export default function Payment() {
 
             {/* Payment Method Selector */}
             <div className="mb-4">
-              <div className="font-mono text-muted mb-2" style={{ fontSize: '0.78rem' }}>
+              <div className="fw-700 text-uppercase mb-2" style={{ fontSize: '0.75rem', letterSpacing: '0.04em', color: 'var(--text-secondary)' }}>
                 SELECT SETTLEMENT METHOD
               </div>
 
@@ -136,27 +134,27 @@ export default function Payment() {
                     <div
                       key={method}
                       onClick={() => setPaymentMethod(method)}
-                      className={`p-3 rounded-3 d-flex align-items-center gap-3 cursor-pointer transition-fast ${isSelected ? 'glass-panel border-cyan' : ''}`}
+                      className="p-3 rounded-3 d-flex align-items-center gap-3 cursor-pointer"
                       style={{
-                        background: isSelected ? 'rgba(0, 242, 254, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                        border: isSelected ? '1.5px solid var(--cyan-neon)' : '1px solid rgba(255, 255, 255, 0.08)',
+                        background: isSelected ? '#EFF6FF' : '#FFFFFF',
+                        border: isSelected ? '2px solid var(--primary)' : '1px solid #E2E8F0',
                         cursor: 'pointer',
-                        transition: 'all 0.2s'
+                        transition: 'all 0.15s ease'
                       }}
                     >
                       <div style={{
-                        width: '38px', height: '38px', borderRadius: '10px',
-                        background: isSelected ? 'var(--cyan-neon)' : 'rgba(255, 255, 255, 0.06)',
+                        width: '40px', height: '40px', borderRadius: '10px',
+                        background: isSelected ? 'var(--primary)' : '#F1F5F9',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: isSelected ? '#040714' : '#cbd5e1'
+                        color: isSelected ? '#FFFFFF' : 'var(--text-primary)'
                       }}>
                         <Icon size={18} />
                       </div>
                       <div className="flex-grow-1">
-                        <div className="fw-700 text-white" style={{ fontSize: '0.92rem' }}>{cfg.label}</div>
-                        <div style={{ color: '#94a3b8', fontSize: '0.76rem' }}>{cfg.desc}</div>
+                        <div className="fw-700" style={{ fontSize: '0.92rem', color: 'var(--text-primary)' }}>{cfg.label}</div>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>{cfg.desc}</div>
                       </div>
-                      {isSelected && <FaCheckCircle color="var(--cyan-neon)" size={16} />}
+                      {isSelected && <FaCheckCircle color="var(--primary)" size={18} />}
                     </div>
                   );
                 })}
@@ -165,7 +163,7 @@ export default function Payment() {
 
             {/* Confirmation CTA */}
             <Button 
-              className="btn-cyber-emerald w-100 py-3 fw-bold" 
+              className="ps-btn-primary w-100 py-3 fw-bold" 
               onClick={handlePayment} 
               disabled={processing}
             >
@@ -176,7 +174,7 @@ export default function Payment() {
               )}
             </Button>
 
-            <div className="text-center mt-3" style={{ color: '#64748b', fontSize: '0.78rem' }}>
+            <div className="text-center mt-3" style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
               🔒 Simulated Payment Switch for College Evaluation • Zero Real Deductions
             </div>
           </div>
